@@ -12,6 +12,10 @@
 | [`grf-cn/`](grf-cn/) | 《grf 中文教程》—— grf 官网 12 篇教程全译（入门 / 方法导论 / 诊断 / 条件均值 / 生存 / ATE 迁移 / RATE 异质性 / 策略学习 / 局部线性森林 / Qini / 类别变量 / RATE-CV），每篇补充「背景与解释」框，明暗可切换 |
 | [`evalITR-cn/`](evalITR-cn/) | 《evalITR 中文教程》—— evalITR 官网 8 篇文档全译（总览 / 安装 / 样本分割 / Caret·SuperLearner 样本分割 / 用户自定义 ITR / 规则比较 / 单一·多种算法交叉验证），核心指标 PAPE·AUPEC·GATEs，每篇补充「背景与解释」框，明暗可切换 |
 | [`causal-tools-cn/`](causal-tools-cn/) | 《因果推断的三件工具》—— Harsha Kokel 博客《Tools for Causal Inference》中文译本，梳理 Pearl 的因果推断三件基础工具（DAG / do-算符 / 反事实），含公式与图示，补充「背景与解释」框衔接 HTE，明暗可切换 |
+| [`metalearner-cn/`](metalearner-cn/) | 《Meta-Learner 方法综述》—— jzhou.org 博客《Meta-Learners for HTE》中文译本，系统梳理 S/T/X/R/DR 等元学习器的构造与取舍，含公式与最优治疗推荐，补充「背景与解释」框，明暗可切换 |
+| [`survlearners-cn/`](survlearners-cn/) | 《survlearners：生存结局的 Meta-Learner》—— 斯坦福 SOM ShahLab R 包教程中文译本（总览 / 入门 / 生存数据金属学习器长文），面向删失结局的 HTE 估计，明暗可切换 |
+| [`tidyhte-cn/`](tidyhte-cn/) | 《tidyhte 中文教程》—— tidyverse 语法的异质处理效应估计流水线（首页 / 实验数据分析 / 方法细节 / 观察性数据分析），SuperLearner 集成 + 交叉拟合 + VIMP 诊断，明暗可切换 |
+| [`rj-dlc-cn/`](rj-dlc-cn/) | 《DeepLearningCausal》—— The R Journal（RJ-2026-035）文章中文译本，深度神经网络 + 集成学习估计处理效应，含不依从下 PATT 估计 |
 | [`bocf-cn/`](bocf-cn/) | 《BOCF 方法再审视》—— PMC2819899（Patient Preference and Adherence, 2010）中文译本，比较 MMRM / LOCF / BOCF / mBOCF / aeBOCF 五种缺失数据处理方法，补充「背景与解释」框，明暗可切换 |
 | [`model4you-cn/`](model4you-cn/) | 《model4you：个体化治疗效应估计的 R 包》—— JORS 2019 文章中文译本，模型树 + 个体化模型两件套 |
 | [`hte-course/`](hte-course/) | 公开课《平均值的谎言：谁真正受益？》—— 异质性治疗效应（HTE）完整讲义 + 10 段 R 复现脚本索引 |
