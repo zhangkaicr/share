@@ -8,11 +8,24 @@
 
 | 路径 | 内容 |
 |---|---|
-| [`imputeTS-cn/`](imputeTS-cn/) | 《imputeTS：R 语言中的时间序列缺失值填补》The R Journal 2017 全文中文译本（原文 CC BY 4.0） |
+| [`policytree-cn/`](policytree-cn/) | 《policytree：从因果森林学到最优策略树》—— policytree 官方 vignette 中文译本（含示例 1–3、运行时间基准、混合搜索、术语对照），暗色主题 |
+| [`imputeTS-cn/`](imputeTS-cn/) | 《imputeTS：R 语言中的时间序列缺失值填补》—— The R Journal 2017 全文中文译本（原文 CC BY 4.0） |
 | [`hte-course/`](hte-course/) | 公开课《平均值的谎言：谁真正受益？》—— 异质性治疗效应（HTE）完整讲义 + 10 段 R 复现脚本索引 |
 | `index.html` | 站点导航首页 |
 
 每个子项目自成一个文件夹，互不干扰，用 GitHub Pages 发布后可独立访问。
+
+## policytree-cn 简介
+
+policytree 官方 vignette 的中文译本。承接本仓库 HTE 主题的下游问题：**算出 CATE 之后怎么办**——把个体化效应转成一条可执行的决策规则。
+
+流水线：`grf` 拟合森林 → `double_robust_scores()` 得到 Γ 矩阵（每个人 × 每个行动的收益估计）→ `policy_tree()` 精确搜索全局最优浅树 → `predict()` 部署到新样本。
+
+覆盖二元处置、三行动多臂、工具变量三种设定，并给出运行时间基准表（含 `split.step` 与 `round(X, 2)` 降基数的加速对比）和 `hybrid_policy_tree` 混合搜索的取舍。
+
+## imputeTS-cn 简介
+
+The R Journal 2017 文章的全文中文译本。核心问题：多重填补、EM、最近邻、热卡等主流方法依赖变量间相关性，单变量时间序列只有一个属性因而无法直接使用，必须转向时间维度的依赖。
 
 ## hte-course 简介
 
@@ -42,4 +55,4 @@ python build.py      # 读 course_template.html + assets/，输出 index.html
 
 ## 声明
 
-讲义中的论文图表取自开放获取文献（CC BY 许可），已注明出处；所有复现图表由本地 R 流水线生成。模拟数据仅用于教学，不代表真实临床结论。
+各译文均已注明原文出处、作者与许可：imputeTS 源自 The R Journal（CC BY 4.0），policytree 源自该包官方 vignette，HTE 讲义中的论文图表取自开放获取文献（CC BY）。所有复现图表由本地 R 流水线生成。模拟数据仅用于教学，不代表真实临床结论。
