@@ -12,6 +12,7 @@
 | [`grf-cn/`](grf-cn/) | 《grf 中文教程》—— grf 官网 12 篇教程全译（入门 / 方法导论 / 诊断 / 条件均值 / 生存 / ATE 迁移 / RATE 异质性 / 策略学习 / 局部线性森林 / Qini / 类别变量 / RATE-CV），每篇补充「背景与解释」框，明暗可切换 |
 | [`evalITR-cn/`](evalITR-cn/) | 《evalITR 中文教程》—— evalITR 官网 8 篇文档全译（总览 / 安装 / 样本分割 / Caret·SuperLearner 样本分割 / 用户自定义 ITR / 规则比较 / 单一·多种算法交叉验证），核心指标 PAPE·AUPEC·GATEs，每篇补充「背景与解释」框，明暗可切换 |
 | [`causal-tools-cn/`](causal-tools-cn/) | 《因果推断的三件工具》—— Harsha Kokel 博客《Tools for Causal Inference》中文译本，梳理 Pearl 的因果推断三件基础工具（DAG / do-算符 / 反事实），含公式与图示，补充「背景与解释」框衔接 HTE，明暗可切换 |
+| [`bocf-cn/`](bocf-cn/) | 《BOCF 方法再审视》—— PMC2819899（Patient Preference and Adherence, 2010）中文译本，比较 MMRM / LOCF / BOCF / mBOCF / aeBOCF 五种缺失数据处理方法，补充「背景与解释」框，明暗可切换 |
 | [`model4you-cn/`](model4you-cn/) | 《model4you：个体化治疗效应估计的 R 包》—— JORS 2019 文章中文译本，模型树 + 个体化模型两件套 |
 | [`hte-course/`](hte-course/) | 公开课《平均值的谎言：谁真正受益？》—— 异质性治疗效应（HTE）完整讲义 + 10 段 R 复现脚本索引 |
 | `index.html` | 站点导航首页 |
@@ -69,6 +70,22 @@ Harsha Kokel 博客文章《Tools for Causal Inference》的中文译本，是�
 
 站点内的「背景与解释」框专门面向医学研究者，把 DAG 条件独立性、后门 / 前门与流行病学混杂控制、反事实与个体化治疗（HTE / ITR）逐一衔接。公式由 MathJax 渲染，右上角按钮可切换明暗主题。原文依原站许可转载翻译并注明出处（harshakokel.com）。
 
+## bocf-cn 简介
+
+PMC2819899 论文《A closer look at the baseline-observation-carried-forward (BOCF)》的中文译本，主题直击临床试验分析的核心痛点：**早期脱落患者的缺失数据怎么处理，结论会不会变**。
+
+以度洛西汀（duloxetine）两项慢性疼痛安慰剂对照试验为例，把五种处理方法摆在一起比：
+
+- **MMRM**（混合模型重复测量，基于似然、不填补）
+- **LOCF**（末次观测结转）
+- **BOCF**（基线观测结转，最保守）
+- **mBOCF**（改良 BOCF，仅把"治疗相关原因"脱落者回退基线）
+- **aeBOCF**（仅"不良事件"脱落者回退基线）
+
+核心启示：度洛西汀的显著性在不同方法下从 `P = 0.004` 一路退到 `P = 0.075`，说明分析方法的选择会直接影响疗效解读；按脱落原因分层、并做敏感性分析，比死守单一方法更稳健。
+
+译文在关键概念处加「背景与解释」框，专门面向医学研究者铺垫缺失数据机制（MCAR / MAR / MNAR）、BOCF/LOCF 的隐含假设、MMRM 为何更受监管青睐、以及敏感性分析的意义。右上角按钮可切换明暗主题。原文（Hong Liu-Seifert 等，*Patient Preference and Adherence*，2010，DOI: 10.2147/ppa.s8135）版权归原作者及期刊所有，本页为个人学习用途的非官方翻译，引用请以英文原文为准。
+
 ## hte-course 简介
 
 以一篇严重钝性创伤输血研究（FFP:RBC 比值，*Critical Care* 2025;29:436）为主线，讲清楚一件事：
@@ -106,4 +123,4 @@ python build.py      # 读 course_template.html + assets/，输出 index.html
 
 ## 声明
 
-各译文均已注明原文出处、作者与许可：imputeTS 源自 The R Journal（CC BY 4.0），policytree 源自该包官方 vignette，HTE 讲义中的论文图表取自开放获取文献（CC BY）。所有复现图表由本地 R 流水线生成。模拟数据仅用于教学，不代表真实临床结论。
+各译文均已注明原文出处、作者与许可：imputeTS 源自 The R Journal（CC BY 4.0），policytree 源自该包官方 vignette，bocf-cn 为 PMC 开放获取文献（Patient Preference and Adherence）的个人学习用途非官方翻译，HTE 讲义中的论文图表取自开放获取文献（CC BY）。所有复现图表由本地 R 流水线生成。模拟数据仅用于教学，不代表真实临床结论。
