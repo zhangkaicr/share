@@ -9,6 +9,7 @@
 | 路径 | 内容 |
 |---|---|
 | [`policytree-cn/`](policytree-cn/) | 《policytree：从因果森林学到最优策略树》—— policytree 官方 vignette 中文译本（含示例 1–3、运行时间基准、混合搜索、术语对照），暗色主题 |
+| [`grf-cn/`](grf-cn/) | 《grf 中文教程》—— grf 官网 12 篇教程全译（入门 / 方法导论 / 诊断 / 条件均值 / 生存 / ATE 迁移 / RATE 异质性 / 策略学习 / 局部线性森林 / Qini / 类别变量 / RATE-CV），每篇补充「背景与解释」框，明暗可切换 |
 | [`model4you-cn/`](model4you-cn/) | 《model4you：个体化治疗效应估计的 R 包》—— JORS 2019 文章中文译本，模型树 + 个体化模型两件套 |
 | [`hte-course/`](hte-course/) | 公开课《平均值的谎言：谁真正受益？》—— 异质性治疗效应（HTE）完整讲义 + 10 段 R 复现脚本索引 |
 | `index.html` | 站点导航首页 |
@@ -32,6 +33,17 @@ JORS 2019 文章的中文译本，主题与 hte-course 一脉相承：**当"所�
 ## imputeTS-cn 简介
 
 The R Journal 2017 文章的全文中文译本。核心问题：多重填补、EM、最近邻、热卡等主流方法依赖变量间相关性，单变量时间序列只有一个属性因而无法直接使用，必须转向时间维度的依赖。
+
+## grf-cn 简介
+
+grf（Generalized Random Forests，广义随机森林）官方站点 12 篇教程的中文全译本，是本站 HTE 主题的方法学底座。覆盖：
+
+- **入门与方法论**：`grf`（速览）、`grf_guide`（正交化 / 标签权重 / 诚实估计的方法论文档）
+- **诊断与异质性检验**：`diagnostics`（重叠性、协变量平衡）、`muhats`（回归森林与条件均值）、`rate` / `rate_cv`（RATE 与交叉验证判断异质性是否真实）
+- **专门森林**：`survival`（右删失、RMST、因果生存森林）、`llf`（局部线性森林）
+- **迁移、策略与扩展**：`ate_transport`（把 ATE 加权到新目标人群）、`policy_learning`（从 CATE 到最优决策树，衔接 policytree）、`maq`（Qini 曲线 / Uplift）、`categorical_inputs`（因子变量编码）
+
+每篇都在关键概念处加了「背景与解释」框，专门面向医学研究者补充处理效应异质性、双稳健、删失、外部效度等铺垫。公式由 MathJax 渲染，右上角按钮可切换明暗主题。原文依 MIT 许可翻译并注明出处。
 
 ## hte-course 简介
 
