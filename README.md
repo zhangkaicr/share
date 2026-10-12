@@ -9,7 +9,7 @@
 | 路径 | 内容 |
 |---|---|
 | [`policytree-cn/`](policytree-cn/) | 《policytree：从因果森林学到最优策略树》—— policytree 官方 vignette 中文译本（含示例 1–3、运行时间基准、混合搜索、术语对照），暗色主题 |
-| [`imputeTS-cn/`](imputeTS-cn/) | 《imputeTS：R 语言中的时间序列缺失值填补》—— The R Journal 2017 全文中文译本（原文 CC BY 4.0） |
+| [`model4you-cn/`](model4you-cn/) | 《model4you：个体化治疗效应估计的 R 包》—— JORS 2019 文章中文译本，模型树 + 个体化模型两件套 |
 | [`hte-course/`](hte-course/) | 公开课《平均值的谎言：谁真正受益？》—— 异质性治疗效应（HTE）完整讲义 + 10 段 R 复现脚本索引 |
 | `index.html` | 站点导航首页 |
 
@@ -22,6 +22,12 @@ policytree 官方 vignette 的中文译本。承接本仓库 HTE 主题的下游
 流水线：`grf` 拟合森林 → `double_robust_scores()` 得到 Γ 矩阵（每个人 × 每个行动的收益估计）→ `policy_tree()` 精确搜索全局最优浅树 → `predict()` 部署到新样本。
 
 覆盖二元处置、三行动多臂、工具变量三种设定，并给出运行时间基准表（含 `split.step` 与 `round(X, 2)` 降基数的加速对比）和 `hybrid_policy_tree` 混合搜索的取舍。
+
+## model4you-cn 简介
+
+JORS 2019 文章的中文译本，主题与 hte-course 一脉相承：**当"所有人共享一个效应"的假定过于严格时怎么办**。它给出的路径很轻——不必换模型，直接把熟悉的 `lm()` / `glm()` / 生存模型塞进 `pmtree()`（分层树）或 `pmforest()` + `pmodel()`（个体化模型）。
+
+示例（奥地利数学考试数据）很有教学价值：总体 −2.33 个百分比且不显著，但树切出的高分学生亚组是 −13.26。
 
 ## imputeTS-cn 简介
 
