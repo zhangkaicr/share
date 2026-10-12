@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Share · 课程讲义与复现物料</title>
+<style>
+:root{
+  --bg:#f7f7f5; --card:#ffffff; --text:#2c2c2a; --muted:#6b6a65;
+  --line:#e3e2dd; --accent:#534ab7; --accent-soft:#eeedfe; --tag:#f1efe8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  line-height:1.7; padding:48px 20px;
+}
+.wrap{max-width:760px;margin:0 auto}
+header{margin-bottom:36px}
+h1{font-size:28px;font-weight:600;letter-spacing:-.2px}
+.sub{color:var(--muted);font-size:15px;margin-top:6px}
+.repo{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:var(--muted);margin-top:10px}
+h2{font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;
+   letter-spacing:.08em;margin:32px 0 14px}
+.card{
+  display:block;background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:22px 24px;text-decoration:none;color:inherit;
+  transition:border-color .15s, transform .15s;
+}
+.card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.card h3{font-size:18px;font-weight:600;margin-bottom:6px}
+.card p{font-size:14px;color:var(--muted);margin-bottom:14px}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.tag{background:var(--tag);border-radius:6px;padding:3px 9px;font-size:12px;color:var(--muted)}
+.tag.k{background:var(--accent-soft);color:var(--accent)}
+footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);
+       font-size:13px;color:var(--muted)}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Share</h1>
+    <p class="sub">因果推断 · 目标试验模拟 · 临床研究方法的讲义与代码复现物料</p>
+    <p class="repo">github.com/zhangkaicr/share</p>
+  </header>
+
+  <h2>公开课讲义</h2>
+  <a class="card" href="hte-course/">
+    <h3>平均值的谎言：谁真正受益？</h3>
+    <p>异质性治疗效应（HTE）— 从一篇创伤输血研究到因果森林的完整 R 复现。单文件自包含讲义，含原文图表与逐段复现对照。</p>
+    <div class="meta">
+      <span class="tag k">HTE</span>
+      <span class="tag">因果森林 · grf</span>
+      <span class="tag">IPTW · NNT</span>
+      <span class="tag">10 段 R 脚本</span>
+    </div>
+  </a>
+
+  <footer>
+    内容由 <a href="https://github.com/zhangkaicr">zhangkaicr</a> 维护 · 讲义中的论文图表来自开放获取文献（CC BY），复现图表本地生成。
+  </footer>
+</div>
+</body>
+</html>
