@@ -8,6 +8,7 @@
 
 | 路径 | 内容 |
 |---|---|
+| [`imputeTS-cn/`](imputeTS-cn/) | 《imputeTS：R 语言中的时间序列缺失值填补》The R Journal 2017 全文中文译本（原文 CC BY 4.0） |
 | [`hte-course/`](hte-course/) | 公开课《平均值的谎言：谁真正受益？》—— 异质性治疗效应（HTE）完整讲义 + 10 段 R 复现脚本索引 |
 | `index.html` | 站点导航首页 |
 
