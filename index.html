@@ -163,6 +163,30 @@ a{color:var(--accent)}
     </div>
   </a>
 
+  <a class="card" href="survlearners-cn/">
+    <h3>survlearners：生存结局的 Meta-Learner</h3>
+    <p>斯坦福 SOM ShahLab R 包教程中文译本（总览 / 入门 / 生存数据金属学习器长文）。当结局不是「是否发生」而是「多久发生」时，删失让普通 HTE 方法失效——本包给出生存结局的 S-/T-/X-/R-learner 一整套实现（含 RMST 差异与限制性平均生存时间估计），方法出自 Biometrika 论文。每页补充「背景与解释」框，铺垫删失机制与生存分析的特殊性。</p>
+    <div class="meta">
+      <span class="tag k">生存分析</span>
+      <span class="tag">Meta-learner</span>
+      <span class="tag">删失 · RMST</span>
+      <span class="tag">HTE</span>
+      <span class="tag">背景注释</span>
+    </div>
+  </a>
+
+  <a class="card" href="tidyhte-cn/">
+    <h3>tidyhte：用 tidyverse 语法估计异质处理效应</h3>
+    <p>Drew Dimmery 与 Edward Kennedy 的 R 包教程中文译本（首页 / 实验数据分析 / 方法细节 / 观察性数据分析）。把 HTE 估计拆成可插拔的流水线：倾向得分模型 → 结果模型 → CATE 估计 → 诊断与变量重要性，全程 SuperLearner 集成 + 交叉拟合，避免单一模型选错带来的偏倚。方法出自 Electronic Journal of Statistics。每页补充「背景与解释」框，衔接流行病学的识别假设与协变量平衡。</p>
+    <div class="meta">
+      <span class="tag k">tidyhte</span>
+      <span class="tag">SuperLearner</span>
+      <span class="tag">交叉拟合</span>
+      <span class="tag">VIMP 诊断</span>
+      <span class="tag">背景注释</span>
+    </div>
+  </a>
+
   <h2>论文译本</h2>
   <a class="card" href="model4you-cn/">
     <h3>model4you：个体化治疗效应估计的 R 包</h3>
@@ -193,6 +217,18 @@ a{color:var(--accent)}
       <span class="tag k">PMC 译文</span>
       <span class="tag">缺失数据</span>
       <span class="tag">BOCF · LOCF · MMRM</span>
+      <span class="tag">背景注释</span>
+    </div>
+  </a>
+
+  <a class="card" href="rj-dlc-cn/">
+    <h3>DeepLearningCausal：深度神经网络与集成学习估计处理效应</h3>
+    <p>The R Journal（RJ-2026-035）文章中文译本。把 meta-learner 骨架换成深度神经网络，用集成学习估计样本与人群平均处理效应（SATE / PATT），并专门处理治疗不依从（noncompliance）下的效应估计。含 8 个章节、7 张表格与大量公式，框图部分点出「未观测混杂无法仅靠观测数据识别」这一因果推断基本立场。</p>
+    <div class="meta">
+      <span class="tag k">R Journal</span>
+      <span class="tag">深度学习</span>
+      <span class="tag">集成学习</span>
+      <span class="tag">不依从 · PATT</span>
       <span class="tag">背景注释</span>
     </div>
   </a>
