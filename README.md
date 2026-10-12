@@ -74,6 +74,45 @@ Harsha Kokel 博客文章《Tools for Causal Inference》的中文译本，是�
 
 站点内的「背景与解释」框专门面向医学研究者，把 DAG 条件独立性、后门 / 前门与流行病学混杂控制、反事实与个体化治疗（HTE / ITR）逐一衔接。公式由 MathJax 渲染，右上角按钮可切换明暗主题。原文依原站许可转载翻译并注明出处（harshakokel.com）。
 
+## metalearner-cn 简介
+
+Junyi Zhou（周骏毅）博客长文《Meta-Learners》的中文译本，是本站 HTE 主题的**方法论骨架**——回答"用什么样的机器学习套路去估计个体化效应"。
+
+文章按两大家族组织：
+
+- **Q-learning 一族**：S-learner（把治疗变量当普通协变量塞进单个模型）、T-learner（分组建模后相减），本质是 g-计算的机器学习版
+- **A-learning 一族**：X-learner（用插补的个体效应做加权）、R-learner（用 Robinson 变换做残差回归，具正交性/Neyman 正交带来的优良性质）、以及无参照组的 R-learner 变体
+
+并延伸到**最优治疗推荐**：从估计出的 CATE 出发构造最优治疗策略，再推广到动态治疗策略（DTR）与 SMART 设计。
+
+译文含 90+ 行内公式与 11 个显示公式（MathJax 渲染），关键处加「背景与解释」框，面向医学研究者衔接 HTE / ITR / 目标试验模拟（TTE）：为什么 A-learner 的正交性在混杂下更稳健、S-learner 为何可能把治疗效应"稀释"掉、以及从效应估计到临床决策规则之间还差哪一步。右上角按钮可切换明暗主题。原文依原站许可翻译并注明出处（jzhou.org）。
+
+## survlearners-cn 简介
+
+斯坦福 SOM ShahLab 的 R 包 survlearners 教程中文译本（总览 / 入门 / 生存数据金属学习器长文），补上本站方法链条上缺的一环：**当结局是"多久发生"而不是"是否发生"时，HTE 怎么做**。
+
+生存结局的难点在于删失——你观测到的不是真实的事件时间，而是"至少活到某个时间点"。直接用普通 CATE 方法会把删失当缺失处理，结论失真。本包给出 S-/T-/X-/R-learner 在生存结局下的完整实现，核心估计量是**限制性平均生存时间（RMST）差**而非风险比，方法出自 Dang 等的 Biometrika 论文。
+
+每页加「背景与解释」框，面向医学研究者铺垫右删失机制、RMST 与风险比的临床解读差异、以及为什么生存数据的异质性检验需要专门的评价标准。
+
+## tidyhte-cn 简介
+
+Drew Dimmery 与 Edward Kennedy 的 R 包 tidyhte 教程中文译本（首页 / 实验数据分析 / 方法细节 / 观察性数据分析），方法出自 *Electronic Journal of Statistics*（doi:10.1214/23-EJS2157）。
+
+核心价值是**把 HTE 估计拆成可插拔的 tidyverse 流水线**：倾向得分模型 → 结果模型 → CATE 估计 → 诊断与变量重要性（VIMP），全程用 SuperLearner 集成并做交叉拟合（cross-fitting），避免"单一模型选错"带来的偏倚，也让结果模型的诊断（风险、系数、RROC 曲线）有标准读法。
+
+四个页面分工：`index` 讲配置与最小示例，`experimental_analysis` 走随机化实验数据，`observational_analysis` 走观察性数据（需额外处理混杂与重叠性），`methodological_details` 讲 MCATE / PCATE / 核平滑等估计量的构造。
+
+译文在关键处加「背景与解释」框，衔接流行病学的识别假设（可忽略性 / 正值性 / 一致性）、协变量平衡检查、集成学习与交叉拟合的意义，以及条件效应与边际效应的临床差别。
+
+## rj-dlc-cn 简介
+
+The R Journal 文章（RJ-2026-035，《DeepLearningCausal: R Package for Estimating Treatment Effects Using Deep Neural Networks and Ensemble Learning》）的中文译本。
+
+主题是**把 meta-learner 的骨架换成深度神经网络**：用深度学习的表示能力估计样本与人群平均处理效应，并用集成学习（stacking / 集成）稳定结果；第 7 节专门处理治疗**不依从**（noncompliance）下的 PATT 估计——这正是临床试验中的常见情形（分配到治疗组不等于实际接受治疗）。
+
+译文含 8 个章节、7 张表格、16 段代码与大量公式（MathJax 渲染），文末保留 44 条英文参考文献原文。「背景与解释」框除了解释 SATE / PATT / CATE 的区分、ITT 与符合方案分析、工具变量的角色外，还明确指出一个基本立场：**任何基于观测数据的方法（包括深度学习）都无法识别未观测混杂**，读者应对文中"深度学习能处理未观测混杂"的表述保持审慎。
+
 ## bocf-cn 简介
 
 PMC2819899 论文《A closer look at the baseline-observation-carried-forward (BOCF)》的中文译本，主题直击临床试验分析的核心痛点：**早期脱落患者的缺失数据怎么处理，结论会不会变**。
