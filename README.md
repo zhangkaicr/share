@@ -10,6 +10,7 @@
 |---|---|
 | [`policytree-cn/`](policytree-cn/) | 《policytree：从因果森林学到最优策略树》—— policytree 官方 vignette 中文译本（含示例 1–3、运行时间基准、混合搜索、术语对照），暗色主题 |
 | [`grf-cn/`](grf-cn/) | 《grf 中文教程》—— grf 官网 12 篇教程全译（入门 / 方法导论 / 诊断 / 条件均值 / 生存 / ATE 迁移 / RATE 异质性 / 策略学习 / 局部线性森林 / Qini / 类别变量 / RATE-CV），每篇补充「背景与解释」框，明暗可切换 |
+| [`evalITR-cn/`](evalITR-cn/) | 《evalITR 中文教程》—— evalITR 官网 8 篇文档全译（总览 / 安装 / 样本分割 / Caret·SuperLearner 样本分割 / 用户自定义 ITR / 规则比较 / 单一·多种算法交叉验证），核心指标 PAPE·AUPEC·GATEs，每篇补充「背景与解释」框，明暗可切换 |
 | [`model4you-cn/`](model4you-cn/) | 《model4you：个体化治疗效应估计的 R 包》—— JORS 2019 文章中文译本，模型树 + 个体化模型两件套 |
 | [`hte-course/`](hte-course/) | 公开课《平均值的谎言：谁真正受益？》—— 异质性治疗效应（HTE）完整讲义 + 10 段 R 复现脚本索引 |
 | `index.html` | 站点导航首页 |
@@ -44,6 +45,18 @@ grf（Generalized Random Forests，广义随机森林）官方站点 12 篇教�
 - **迁移、策略与扩展**：`ate_transport`（把 ATE 加权到新目标人群）、`policy_learning`（从 CATE 到最优决策树，衔接 policytree）、`maq`（Qini 曲线 / Uplift）、`categorical_inputs`（因子变量编码）
 
 每篇都在关键概念处加了「背景与解释」框，专门面向医学研究者补充处理效应异质性、双稳健、删失、外部效度等铺垫。公式由 MathJax 渲染，右上角按钮可切换明暗主题。原文依 MIT 许可翻译并注明出处。
+
+## evalITR-cn 简介
+
+evalITR（评估个体化治疗规则，Individualized Treatment Rules）官方文档 8 篇的中文全译本，紧跟 grf-cn / policytree-cn 的脉络：**估计出 CATE 之后，如何真正评估"按规则分配治疗"比"千人一方"好多少**。
+
+覆盖：
+
+- **入门**：`overview`（包总览，PAPE / AUPEC / GATEs 指标与 Imai & Li 方法出处）、`install`（CRAN / GitHub 安装）
+- **核心方法**：`sample_split`（为什么必须把训练与评估分两批数据以防乐观偏差）、`sample_split_caret`（用 caret / SuperLearner 拟合 ITR）、`user_itr`（用户自定义规则函数）、`user_itr_algs`（估计规则 vs 专家规则，AUPEC 曲线与模型摘要怎么读）
+- **交叉验证评估**：`cv_single_alg`（K 折为何关键，如何得无偏 AUPEC）、`cv_multiple_alg`（多 ML 算法比较与模型选择）
+
+每篇在关键概念处加「背景与解释」框，专门面向医学研究者补充 ITR 与 ATE 的区别、样本分割 / 交叉验证为何必要、预算约束与 AUPEC 的临床意义等。右上角按钮可切换明暗主题。原文依开源许可翻译并注明出处（源代码 github.com/MichaelLLi/evalITR）。
 
 ## hte-course 简介
 
