@@ -1,16 +1,51 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme-default="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>imputeTS：R 语言中的时间序列缺失值填补（中文译本）</title>
 <meta name="description" content="The R Journal 文章 imputeTS: Time Series Missing Value Imputation in R 的中文翻译，作者 Moritz & Bartz-Beielstein，原文以 CC BY 4.0 发布。">
+<script>
+(function(){
+  var KEY="share-theme", d=document.documentElement;
+  try{var saved=localStorage.getItem(KEY);}catch(e){var saved=null;}
+  d.setAttribute("data-theme", saved || d.getAttribute("data-theme-default") || "light");
+  document.addEventListener("DOMContentLoaded",function(){
+    var b=document.getElementById("theme-toggle"); if(!b) return;
+    function sync(){
+      var dark=d.getAttribute("data-theme")==="dark";
+      b.setAttribute("aria-pressed", dark?"true":"false");
+      b.setAttribute("title", dark?"切换到亮色主题 (Alt+T)":"切换到暗色主题 (Alt+T)");
+    }
+    b.addEventListener("click",function(){
+      var nxt=d.getAttribute("data-theme")==="dark"?"light":"dark";
+      d.setAttribute("data-theme",nxt);
+      try{localStorage.setItem(KEY,nxt);}catch(e){}
+      sync();
+    });
+    document.addEventListener("keydown",function(e){
+      if(e.altKey&&(e.key==="t"||e.key==="T")) b.click();
+    });
+    sync();
+  });
+})();
+</script>
 <style>
 :root{
   --bg:#f7f7f5; --card:#ffffff; --text:#2c2c2a; --muted:#6b6a65;
   --line:#e3e2dd; --accent:#0f6e56; --accent-soft:#e1f5ee; --code-bg:#f4f4f1;
   --warn-bg:#faeeda; --warn-line:#ba7517; --tag:#f1efe8;
 }
+:root[data-theme="dark"]{
+  --bg:#0f1116; --card:#181b22; --text:#e4e6ea; --muted:#98a0ac;
+  --line:#2a2f3a; --accent:#5ad1a0; --accent-soft:#14281f; --code-bg:#0b0d12;
+  --warn-bg:#2b2317; --warn-line:#8a6f34; --tag:#1e222b;
+}
+[data-theme="dark"] pre{border-color:#1d2129}
+[data-theme="dark"] pre code{color:#d7dde5}
+[data-theme="dark"] figure img{background:#ffffff; padding:6px}
+[data-theme="dark"] th{background:#1e222b}
+[data-theme="dark"] details summary{color:#dfe3e8}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);line-height:1.85;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
@@ -57,9 +92,28 @@ details li{margin:6px 0;line-height:1.6}
 .tag.k{background:var(--accent-soft);color:var(--accent)}
 footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
 @media(max-width:640px){body{font-size:15.5px}h1{font-size:24px}.srcbox dl{grid-template-columns:1fr}}
+.tt{
+  position:fixed; top:16px; right:16px; z-index:9999; width:40px; height:40px;
+  display:flex; align-items:center; justify-content:center; border-radius:50%;
+  cursor:pointer; color:var(--text); background:var(--card); border:1px solid var(--line);
+  box-shadow:0 2px 10px rgba(0,0,0,.14); transition:transform .15s, border-color .15s, background .15s;
+}
+.tt:hover{transform:translateY(-1px); border-color:var(--accent)}
+.tt:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+[data-theme="dark"] .ico-sun{display:block}
+[data-theme="dark"] .ico-moon{display:none}
+[data-theme="light"] .ico-sun{display:none}
+[data-theme="light"] .ico-moon{display:block}
+@media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
+@media print{.tt{display:none}}
 </style>
 </head>
 <body>
+<button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
+  <svg class="ico-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12H5M19 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3L17 7M7 17l-1.7 1.7"/></svg>
+  <svg class="ico-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 14.5A8.2 8.2 0 0 1 9.5 4a8.2 8.2 0 1 0 10.5 10.5z"/></svg>
+</button>
+
 <div class="wrap">
 
 <header>
