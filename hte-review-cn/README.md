@@ -179,15 +179,25 @@ HTE估计需要更大的变量集合，以捕捉可能在不同程度上影响�
 
 ## 图注
 
+![图1](assets/fig1.png)
+
 > **图1** 医学科学领域治疗效应分析示意图。A. 因果关系的一个例子。B. 在Neyman-Rubin框架下从真实世界数据估计因果治疗效应。(a) RCT中的受试者被随机分配到治疗组和对照组，因此两组受试者具有相似的特征。(b) 真实世界数据中的受试者因疾病适应证而并非被随机分配到治疗组和对照组。(c) 对各组受试者进行匹配可以降低偏倚[13]。(d) 按治疗倾向对受试者加权可以创建可比较的伪人群[14,15]（细节见S.1.1）。(e) Neyman-Rubin因果效应计算。C. 异质性治疗效应 vs 平均治疗效应。患者是多样的，治疗效应各不相同。估计平均治疗效应（ATE）可能把每位患者的异质性过度简单化。
+
+![图2](assets/fig2.png)
 
 > **图2** 具有高维特征的异质性治疗效应玩具示例。基于受试者特征X，受试者可以暴露于治疗T或不暴露（即E[T|X]），并具有不同水平的结局（即E[Y|X]）。治疗效应也因源于受试者特征的这些不同背景或干扰因素而变化。
 
+![图3](assets/fig3.png)
+
 > **图3** 不同HTE模型架构示意图。(A) 比较Künzel等元学习器的玩具示例。元学习器将HTE估计分解为若干子回归问题，可利用任意监督机器学习模型。(B) 协变量偏移问题与反事实回归网络示意图[18,38]。利用神经网络[18,38]通过协变量偏移进行平衡表示学习，获得对患者特征X治疗不变的表示。
+
+![图4](assets/fig4.png)
 
 > **图4** 表现最好的模型（以随机森林为基础学习器的S-learner）的特征重要性值。SHAP值为负的特征意味着该特征可导致负的HTE值，意味着研究治疗降低了AD发生风险。特征按重要性降序排列。蓝色点 = 低特征值；红色点 = 高特征值。
 
 ## 表1 HTE估计方法比较
+
+![表1（原文）](assets/table1.png)
 
 | 模型 | 特征 | 治疗类型 | 治疗分配如何纳入？ | 选择偏倚如何处理？ |
 | --- | --- | --- | --- | --- |
@@ -206,6 +216,8 @@ HTE估计需要更大的变量集合，以捕捉可能在不同程度上影响�
 
 ## 表2 我们的实验设置与真实试验NCT03991988的比较
 
+![表2（原文）](assets/table2.png)
+
 | | 孟鲁司特随机临床试验（NCT03991988） | 我们的目标试验设计 |
 | --- | --- | --- |
 | 目的 | 评估启动孟鲁司特对前驱期AD的淀粉样蛋白与tau积累及认知症状的影响 | 在真实世界数据（2007–2020）的常规临床诊疗情境中，评估一类抗哮喘药物对AD发病预防的效应 |
@@ -217,12 +229,14 @@ HTE估计需要更大的变量集合，以捕捉可能在不同程度上影响�
 
 ## 表3 在使用全国性索赔数据的目标试验（针对NCT03991988）中各种HTE估计模型的比较
 
+![表3（原文）](assets/table3.png)
+
 | 类别 | 模型 | 设置 | 稳健性 (ERMSE) | 拟合优度 (IF-PEHE) |
 | --- | --- | --- | --- | --- |
-| 元学习器 | S-learner | Logistic Regression | 0.0235 | 23.12 |
-| | | **Random Forest** | **0.01929** | **9.82** |
-| | T-learner | XGBoost Classifier | 0.0380 | 19.01 |
-| | | Logistic Regression | 0.2933 | 155.63 |
+| 元学习器 | S-learner | Logistic Regression | 0.0225 | 22.12 |
+| | | **Random Forest** | **0.0029** | **9.82** |
+| | | XGBoost Classifier | 0.0380 | 19.01 |
+| | T-learner | Logistic Regression | 0.2933 | 155.63 |
 | | | Random Forest | 0.0737 | 21.66 |
 | | | XGBoosting | 0.2926 | 57.77 |
 | | X-learner | Outcome learner: Logistic Regression；Effect learner: ElasticNet | 0.0705 | 35.78 |
@@ -230,10 +244,10 @@ HTE估计需要更大的变量集合，以捕捉可能在不同程度上影响�
 | | | Outcome learner: XGBoost Classifier；Effect learner: XGBoost Regressor | 0.1980 | 79.33 |
 | | R-learner | Outcome learner: Logistic Regression；Effect learner: ElasticNet（等价于DML） | 0.0110 | 22.61 |
 | | | Outcome learner: XGBoost Classifier；Effect learner: XGBoost Regressor | 0.5873 | 385.34 |
-| 平衡表示学习 | CFRNet | 表示学习：Deep Neural Network；假设：Learner Neural Network | 0.0547 | 102.60 |
-| | DRLearner | 表示学习：Three neural networks, two regression networks for each treatment arm；Control learner: two logistic networks to model logging policy, design weights for confounder impact | 0.0597 | 152.99 |
+| 平衡表示学习 | CFRNet | 表示学习器（Representation Learner）：Deep Neural Network；假设学习器（Hypothesis Learner）：Deep Neural Network | 0.0547 | 102.60 |
+| | DRLearner | 表示学习器：Three neural networks, two regression networks for each treatment arm；混杂 learner（Confounder Learner）：two logistic networks to model logging policy, design weights for confounder impact | 0.0597 | 152.99 |
 | 表示学习（其他） | DragonNet | Outcome learner: Neural Network Regressor which learns outcome as well as propensity scores；Effect learner: Neural Network Regressor | 0.0401 | 53.57 |
-| 因果森林 | Generalized Random Forest | Single tree estimator: double sample causal tree | 0.0300 | 18.90 |
+| 因果森林 | Generalized Random Forest | Single tree estimator: double sample causal tree | 0.0060 | 18.90 |
 
 ## 参考文献
 

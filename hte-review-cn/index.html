@@ -57,6 +57,10 @@ h1{font-size:29px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 .content thead th{background:var(--tag)}
 .content blockquote{margin:16px 0;padding:12px 18px;border-left:3px solid var(--accent);
     background:var(--card);border-radius:0 8px 8px 0;color:var(--muted);font-size:14.5px}
+.content figure.fig{margin:22px 0;text-align:center}
+.content figure.fig img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:8px}
+.content figure.fig figcaption{margin-top:10px;font-size:14px;color:var(--muted);text-align:left;line-height:1.7}
+.content figure.fig figcaption strong{color:var(--text)}
 .content strong{font-weight:700}
 .foot{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
 .foot a{color:var(--accent)}
@@ -183,13 +187,12 @@ h1{font-size:29px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 <h2>数据可用性</h2>
 <p>数据将根据请求提供。</p>
 <h2>图注</h2>
-<blockquote>
-<p><strong>图1</strong> 医学科学领域治疗效应分析示意图。A. 因果关系的一个例子。B. 在Neyman-Rubin框架下从真实世界数据估计因果治疗效应。(a) RCT中的受试者被随机分配到治疗组和对照组，因此两组受试者具有相似的特征。(b) 真实世界数据中的受试者因疾病适应证而并非被随机分配到治疗组和对照组。(c) 对各组受试者进行匹配可以降低偏倚[13]。(d) 按治疗倾向对受试者加权可以创建可比较的伪人群[14,15]（细节见S.1.1）。(e) Neyman-Rubin因果效应计算。C. 异质性治疗效应 vs 平均治疗效应。患者是多样的，治疗效应各不相同。估计平均治疗效应（ATE）可能把每位患者的异质性过度简单化。</p>
-<p><strong>图2</strong> 具有高维特征的异质性治疗效应玩具示例。基于受试者特征X，受试者可以暴露于治疗T或不暴露（即E[T|X]），并具有不同水平的结局（即E[Y|X]）。治疗效应也因源于受试者特征的这些不同背景或干扰因素而变化。</p>
-<p><strong>图3</strong> 不同HTE模型架构示意图。(A) 比较Künzel等元学习器的玩具示例。元学习器将HTE估计分解为若干子回归问题，可利用任意监督机器学习模型。(B) 协变量偏移问题与反事实回归网络示意图[18,38]。利用神经网络[18,38]通过协变量偏移进行平衡表示学习，获得对患者特征X治疗不变的表示。</p>
-<p><strong>图4</strong> 表现最好的模型（以随机森林为基础学习器的S-learner）的特征重要性值。SHAP值为负的特征意味着该特征可导致负的HTE值，意味着研究治疗降低了AD发生风险。特征按重要性降序排列。蓝色点 = 低特征值；红色点 = 高特征值。</p>
-</blockquote>
+<figure class="fig"><img src="assets/fig1.png" alt="图1" loading="lazy"><figcaption><strong>图1</strong> 医学科学领域治疗效应分析示意图。A. 因果关系的一个例子。B. 在Neyman-Rubin框架下从真实世界数据估计因果治疗效应。(a) RCT中的受试者被随机分配到治疗组和对照组，因此两组受试者具有相似的特征。(b) 真实世界数据中的受试者因疾病适应证而并非被随机分配到治疗组和对照组。(c) 对各组受试者进行匹配可以降低偏倚[13]。(d) 按治疗倾向对受试者加权可以创建可比较的伪人群[14,15]（细节见S.1.1）。(e) Neyman-Rubin因果效应计算。C. 异质性治疗效应 vs 平均治疗效应。患者是多样的，治疗效应各不相同。估计平均治疗效应（ATE）可能把每位患者的异质性过度简单化。</figcaption></figure>
+<figure class="fig"><img src="assets/fig2.png" alt="图2" loading="lazy"><figcaption><strong>图2</strong> 具有高维特征的异质性治疗效应玩具示例。基于受试者特征X，受试者可以暴露于治疗T或不暴露（即E[T|X]），并具有不同水平的结局（即E[Y|X]）。治疗效应也因源于受试者特征的这些不同背景或干扰因素而变化。</figcaption></figure>
+<figure class="fig"><img src="assets/fig3.png" alt="图3" loading="lazy"><figcaption><strong>图3</strong> 不同HTE模型架构示意图。(A) 比较Künzel等元学习器的玩具示例。元学习器将HTE估计分解为若干子回归问题，可利用任意监督机器学习模型。(B) 协变量偏移问题与反事实回归网络示意图[18,38]。利用神经网络[18,38]通过协变量偏移进行平衡表示学习，获得对患者特征X治疗不变的表示。</figcaption></figure>
+<figure class="fig"><img src="assets/fig4.png" alt="图4" loading="lazy"><figcaption><strong>图4</strong> 表现最好的模型（以随机森林为基础学习器的S-learner）的特征重要性值。SHAP值为负的特征意味着该特征可导致负的HTE值，意味着研究治疗降低了AD发生风险。特征按重要性降序排列。蓝色点 = 低特征值；红色点 = 高特征值。</figcaption></figure>
 <h2>表1 HTE估计方法比较</h2>
+<figure class="fig"><img src="assets/table1.png" alt="表1（原文）" loading="lazy"><figcaption>表1（原文）</figcaption></figure>
 <table>
 <thead>
 <tr>
@@ -288,6 +291,7 @@ h1{font-size:29px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 </tbody>
 </table>
 <h2>表2 我们的实验设置与真实试验NCT03991988的比较</h2>
+<figure class="fig"><img src="assets/table2.png" alt="表2（原文）" loading="lazy"><figcaption>表2（原文）</figcaption></figure>
 <table>
 <thead>
 <tr>
@@ -330,6 +334,7 @@ h1{font-size:29px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 </tbody>
 </table>
 <h2>表3 在使用全国性索赔数据的目标试验（针对NCT03991988）中各种HTE估计模型的比较</h2>
+<figure class="fig"><img src="assets/table3.png" alt="表3（原文）" loading="lazy"><figcaption>表3（原文）</figcaption></figure>
 <table>
 <thead>
 <tr>
@@ -345,26 +350,26 @@ h1{font-size:29px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 <td>元学习器</td>
 <td>S-learner</td>
 <td>Logistic Regression</td>
-<td>0.0235</td>
-<td>23.12</td>
+<td>0.0225</td>
+<td>22.12</td>
 </tr>
 <tr>
 <td></td>
 <td></td>
 <td><strong>Random Forest</strong></td>
-<td><strong>0.01929</strong></td>
+<td><strong>0.0029</strong></td>
 <td><strong>9.82</strong></td>
 </tr>
 <tr>
 <td></td>
-<td>T-learner</td>
+<td></td>
 <td>XGBoost Classifier</td>
 <td>0.0380</td>
 <td>19.01</td>
 </tr>
 <tr>
 <td></td>
-<td></td>
+<td>T-learner</td>
 <td>Logistic Regression</td>
 <td>0.2933</td>
 <td>155.63</td>
@@ -421,14 +426,14 @@ h1{font-size:29px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 <tr>
 <td>平衡表示学习</td>
 <td>CFRNet</td>
-<td>表示学习：Deep Neural Network；假设：Learner Neural Network</td>
+<td>表示学习器（Representation Learner）：Deep Neural Network；假设学习器（Hypothesis Learner）：Deep Neural Network</td>
 <td>0.0547</td>
 <td>102.60</td>
 </tr>
 <tr>
 <td></td>
 <td>DRLearner</td>
-<td>表示学习：Three neural networks, two regression networks for each treatment arm；Control learner: two logistic networks to model logging policy, design weights for confounder impact</td>
+<td>表示学习器：Three neural networks, two regression networks for each treatment arm；混杂 learner（Confounder Learner）：two logistic networks to model logging policy, design weights for confounder impact</td>
 <td>0.0597</td>
 <td>152.99</td>
 </tr>
@@ -443,7 +448,7 @@ h1{font-size:29px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 <td>因果森林</td>
 <td>Generalized Random Forest</td>
 <td>Single tree estimator: double sample causal tree</td>
-<td>0.0300</td>
+<td>0.0060</td>
 <td>18.90</td>
 </tr>
 </tbody>
