@@ -124,6 +124,35 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -133,7 +162,9 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 
 <div class="wrap">
   <div class="topbar">
-    <a class="back" href="../index.html">&larr; 返回 share 总览</a>
+    <a class="back" href="../index.html">&larr; 返回 share 总览</a><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span>
   </div>
   <h1>因果推断的三件工具：从贝叶斯网络、do-算符到反事实</h1>
   <p class="sub">原文：<a href="https://harshakokel.com/posts/causal-tools/" target="_blank" rel="noopener">Tools for Causal Inference</a>（英文）&nbsp;·&nbsp;作者 Harsha Kokel，基于 Judea Pearl 的《因果推断的七件工具》与《为什么》一书</p>
@@ -150,7 +181,7 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
   <p>Pearl 的框架回答的正是这个问题：<strong>当因果结构（一张有向图）已知时，我们如何用观测数据正确地估计"如果干预会怎样"</strong>。这正是你现在做的处理效应异质性（HTE）工作的底层逻辑——无论是用倾向得分、逆概率加权，还是因果森林，本质上都在"利用已知的因果结构"去识别效应。下面三件工具，恰好对应这条链路上的三个关键概念。</p>
 </div>
 
-<h2>工具一：用图模型编码因果假设——透明且可检验</h2>
+<h2 id="sec-工具一-用图模型编码因果假设-透明且可检验">工具一：用图模型编码因果假设——透明且可检验</h2>
 
 <p>工具一强调<strong>使用贝叶斯网络（Bayesian Network, BN）以图形方式表示因果性</strong>。通过 BN 来表示因果影响，我们可以利用条件独立性的三条规则进行推断。</p>
 
@@ -182,7 +213,7 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
   <p>这里最关键的一点，也是原文反复强调的：<strong>$P(y \mid X=3)$ 是"在数据中看到 $X=3$ 的那群人里 $y$ 的分布"，而 $P(y \mid do(X=3))$ 是"如果我强制让所有人 $X=3$，$y$ 的分布"</strong>。前者混入了"谁会被分到 $X=3$"背后的所有因果机制（选择偏差、混杂），后者剥离了它们。观察性研究中几乎所有偏倚，本质上都来自把这两个量混为一谈。能在一张图上把因果假设画出来，意味着你的假设是<strong>透明、可讨论、可被数据检验</strong>的——这比在回归方程里悄悄塞一堆协变量要诚实得多。</p>
 </div>
 
-<h2>工具二：do-算符（do-calculus）与混杂控制</h2>
+<h2 id="sec-工具二-do-算符-do-calculus-与混杂控制">工具二：do-算符（do-calculus）与混杂控制</h2>
 
 <p>在上面的例子中，对变量 $x$ 进行干预并将其固定为 $3$，相当于让 $x$ 独立于它的<strong>所有祖先</strong>——也就是说，我们删去所有指向 $X$ 的入边。此时，对所得图计算 $P(y \mid X=3)$，就会给出原图的 $P(y \mid do(X=3))$。</p>
 
@@ -240,10 +271,10 @@ $$</p>
   <p><strong>前门准则</strong>则解决"存在不可观测混杂"的难题：当 $X$ 通过中介 $Z$ 影响 $Y$、且 $X \rightarrow Z \rightarrow Y$ 这条路径干净时，我们即便看不到混杂，也能识别 $X$ 对 $Y$ 的效应。它和你想做的<strong>中介分析（mediation）</strong>直接相关。对医学研究者而言，这意味着：当某个机制变量（例如"服药后血压变化"）介于处理与结局之间时，前门公式给出了一种绕过未观测混杂的识别思路。</p>
 </div>
 
-<h2>工具三：反事实的算法化</h2>
+<h2 id="sec-工具三-反事实的算法化">工具三：反事实的算法化</h2>
 
 <div class="rulebox">
-<h3>反事实的经验法则</h3>
+<h3 id="sec-反事实的经验法则">反事实的经验法则</h3>
 <p>反事实（counterfactual）谈论的是某个特定的<strong>个体 / 事件 / 场景</strong>。</p>
 </div>
 
@@ -303,11 +334,11 @@ $$</p>
   <p>顺带一提：原文把 SEM 和线性回归的区别点得很准——回归的误差项 $\varepsilon$ 是随机的、跨情景会变；SEM 的 $U$ 是"属于这个人的"，在反事实宇宙里被冻结。这种"个体不变性"正是因果推断区别于单纯预测的关键。</p>
 </div>
 
-<h2>批评</h2>
+<h2 id="sec-批评">批评</h2>
 
 <p>我确实相信，机器学习与人工智能的到来，使得"从观测数据中学习因果结构"这一任务变得必要。上面提到的三件工具<strong>并不做这件事</strong>——它们假设因果结构已经给定。这些工具为我们提供了在机器学习中<strong>利用</strong>因果结构的正确方式。我相信，大多数为分类 / 回归任务构建的机器学习模型，已经默认假定了某种形式的因果结构；但尚不清楚的是，这些模型是否正确地利用了它们所假定的因果结构。这三件工具可以帮助我们回答这一点。至于所假定的因果结构本身是否正确，这个问题可能是主观的、且与具体任务相关——上面这三件工具显然回答不了。</p>
 
-<h2>参考文献</h2>
+<h2 id="sec-参考文献">参考文献</h2>
 <ol>
 <li>《为什么：因果关系的新科学》（<em>The Book of Why: The New Science of Cause and Effect</em>），Judea Pearl 与 Dana Mackenzie 著</li>
 <li>《因果推断的七件工具，兼论机器学习》（<em>The Seven Tools of Causal Inference, with Reflections on Machine Learning</em>），Judea Pearl 著</li>
@@ -321,5 +352,6 @@ $$</p>
     <p>本页为 Harsha Kokel 博客文章《<a href="https://harshakokel.com/posts/causal-tools/" target="_blank" rel="noopener">Tools for Causal Inference</a>》的中文译本，原文基于 Judea Pearl 的《因果推断的七件工具》与《为什么》一书。原文版权归原作者所有，依原站许可转载翻译并注明出处，仅供学习交流。文中的数学公式与图片保持原样（图片引自原站），译文新增的「背景与解释」框为译者补充。</p>
   </div>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
