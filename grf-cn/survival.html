@@ -133,6 +133,35 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -142,7 +171,9 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 
 <div class="wrap">
   <div class="topbar">
-    <a class="back" href="index.html">&larr; grf 教程总览</a>
+    <a class="back" href="index.html">&larr; grf 教程总览</a><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span>
   </div>
   <h1>含时间事件的因果森林（生存结局）</h1>
   <p class="sub">原文：<a href="https://grf-labs.github.io/grf/articles/survival.html" target="_blank" rel="noopener">Causal forest with time-to-event data</a>（英文）&nbsp;·&nbsp;grf 官方文档中文译本</p>
@@ -153,7 +184,7 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 <div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">grf</span>)</pre></div>
 <p>本文用一篇面向初学者的简明概览，介绍如何借助 GRF 这类非参数估计量，在生存分析（survival）场景下灵活地估计处理效应（treatment effect），同时我们尽量不去对删失（censoring）与生存过程做过多假设。前半部分先介绍右删失（right-censored）数据，以及估计平均生存时间时遇到的问题；后半部分展示 GRF 如何利用 <code>sample.weights</code> 构建基于逆概率删失加权（IPCW）的 <a href="https://grf-labs.github.io/grf/reference/causal_forest.html">causal_forest</a>，并讲解 <a href="https://grf-labs.github.io/grf/reference/causal_survival_forest.html">causal_survival_forest</a> 函数中更加强大的估计方法。</p>
 <div id="right-censored-data" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-右删失数据">
 <a href="#right-censored-data" class="anchor"></a>右删失数据</h2>
 <p><img src="https://grf-labs.github.io/grf/articles/data/California_Sea_Otter.jpg" align="right" height="120" alt="加州海獭，摄影 Michael Baird">
 设想我们想估计 <span class="math inline">\(E[T]\)</span>：一只海獭幼崽平均要多久才能抓到第一只猎物。我们驱车前往距斯坦福校园约一小时车程的 Moss Landing，给几只同年龄的幼崽戴上设备，用来记录它们是否抓到了海胆、扇贝、螃蟹等。受经费和时间所限，研究在第 10 天结束。在这 10 天里，测量设备也可能随机出故障（电池可能在第 12 天彻底耗尽、设备失灵等）。这意味着，对一部分幼崽，我们没能观察到它们抓到猎物的时刻，而只观察到了设备停止工作的时刻，也就是它们被删失（censored）的时刻：<span class="math inline">\(C\)</span>。下图展示了这类数据可能的样子，黑色竖条表示研究结束点。</p>
@@ -256,7 +287,7 @@ T_i]\)</span> 不要过低，否则样本权重会爆炸式增大。直观地从
 
 </div>
 <div id="cate-estimation-and-right-censored-data" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-cate-估计与右删失数据">
 <a href="#cate-estimation-and-right-censored-data" class="anchor"></a>CATE 估计与右删失数据</h2>
 <p>沿用开头那个虚构的实验设定，现在想象我们把海獭幼崽随机分成两组：处理组（<span class="math inline">\(W=1\)</span>）和对照组（<span class="math inline">\(W=0\)</span>）。处理组接受捕猎训练，我们认为这能帮助它们更有效地抓到猎物；对照组什么都不做。我们还收集了一些个体层面的协变量（covariate）<span class="math inline">\(X\)</span>，比如 <span class="math inline">\(X_1\)</span>=海獭体型等。我们关心的，是在给定协变量条件下结局（RMST）的期望差异，定义如下：</p>
 <p><span class="math display">\[\tau(x) = E[T(1) \land h - T(0) \land h
@@ -287,7 +318,7 @@ W_i] \leq 1 - \eta_C\)</span>。</li>
 <span class="no">D</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span>(<span class="no">event.time</span> <span class="kw">&lt;=</span> <span class="no">censor.time</span>)</pre></div>
 </div>
 <div id="causal-forest-with-sample-weights" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-带样本权重的因果森林">
 <a href="#causal-forest-with-sample-weights" class="anchor"></a>带样本权重的因果森林</h2>
 <p>本节展示如何利用估计出的样本权重，把 <code>causal_forest</code> 用于 IPCW 估计。GRF 的大多数估计量都带有一个可选的 <code>sample.weights</code> 参数，它会在 GRF 算法的每一步（重标记 / 分裂 / 预测）都被纳入考虑。我们先用一个 <a href="https://grf-labs.github.io/grf/reference/survival_forest.html">survival_forest</a>
 来估计删失过程 <span class="math inline">\(P[C_i >
@@ -311,7 +342,7 @@ t \, | X_i = x, W_i = w]\)</span>，恰好让我们可以不去纠结这些具�
 <p>ATE 为负，说明捕猎训练让海獭幼崽抓到第一只猎物所需的天数少于对照组，也就是说，处理（treatment）的估计影响是正的。</p>
 </div>
 <div id="causal-survival-forest-csf" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-因果生存森林-csf">
 <a href="#causal-survival-forest-csf" class="anchor"></a>因果生存森林（CSF）</h2>
 <p>前面这种方法的缺点有两个：</p>
 <ol style="list-style-type: lower-alpha">
@@ -359,7 +390,7 @@ t \, | X_i = x, W_i = w]\)</span>（"..." 表示其他干扰参数），把它�
 <span class="co">#&gt;  -0.9667595 0.2476909 priorities | AUTOC</span></pre></div>
 </div>
 <div id="other-estimation-targets-survival-probabilities" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-其他估计目标-生存概率">
 <a href="#other-estimation-targets-survival-probabilities" class="anchor"></a>其他估计目标：生存概率</h2>
 <p>CSF 还可以用来估计生存概率（survival probability）的差异。这个选项通过参数 <code>target = "survival.probability"</code> 提供，针对给定的 <code>horizon</code> <span class="math inline">\(h\)</span> 估计：</p>
 <p><span class="math display">\[\tau(x) = P[T(1) > h \, | X = x] -
@@ -378,7 +409,7 @@ E[y(T(1)) - y(T(0)) \, | X = x]\)</span>。限制平均生存时间对应的结�
 <p>这个通用设定还能让我们直观地理解：什么时候 CSF 的估计方法会比 IPCW 更高效？答案就是当数据中有大量样本在 <span class="math inline">\(h\)</span> 之前被删失时。IPCW 方法会直接丢弃这些样本，而 CSF 会利用它们来提高估计效率。</p>
 </div>
 <div id="further-resources" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-延伸阅读">
 <a href="#further-resources" class="anchor"></a>延伸阅读</h2>
 <ul>
 <li><p><a href="https://arxiv.org/abs/2312.02482">这篇简短示例文章</a>由 Sverdrup 与 Wager（2024）撰写，演示了如何应用 <code>causal_survival_forest</code>，利用一项随机对照试验（RCT）的数据来分析失业持续时间的异质性。</p></li>
@@ -386,7 +417,7 @@ E[y(T(1)) - y(T(0)) \, | X = x]\)</span>。限制平均生存时间对应的结�
 </ul>
 </div>
 <div id="references" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-参考文献">
 <a href="#references" class="anchor"></a>参考文献</h2>
 <p>Cui, Yifan, Michael R. Kosorok, Erik Sverdrup, Stefan Wager, and
 Ruoqing Zhu. Estimating Heterogeneous Treatment Effects with
@@ -412,5 +443,6 @@ Causal Inference.</em> Chapman &amp; Hall/CRC Press, 2023. (<a href="https://arx
     <p>本页为 <a href="https://grf-labs.github.io/grf/articles/survival.html" target="_blank" rel="noopener">grf 官方文档</a> 的中文译本，原文版权归 grf 作者所有，依据项目许可（MIT）翻译并注明出处，仅供学习交流。代码与公式保持原样，译文新增的「背景与解释」框为译者补充。</p>
   </div>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
