@@ -128,6 +128,35 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -137,7 +166,9 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 
 <div class="wrap">
   <div class="topbar">
-    <a class="back" href="index.html">&larr; evalITR 教程总览</a>
+    <a class="back" href="index.html">&larr; evalITR 教程总览</a><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span>
   </div>
   <h1>比较估计的 ITR 与用户自定义 ITR</h1>
   <p class="sub">原文：<a href="https://michaellli.github.io/evalITR/articles/user_itr_algs.html" target="_blank" rel="noopener">Compare Estimated and User Defined ITR</a>（英文）&nbsp;·&nbsp;evalITR 官方文档中文译本</p>
@@ -437,5 +468,6 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
     <p>本页为 <a href="https://michaellli.github.io/evalITR/articles/user_itr_algs.html" target="_blank" rel="noopener">evalITR 包官方文档</a> 的中文译本，原文版权归原作者（Michael Li 等）所有，依据开源许可翻译并注明出处，仅供学习交流。R 代码保持原样，译文新增的「背景与解释」框为译者补充。evalITR 源代码：<a href="https://github.com/MichaelLLi/evalITR" target="_blank" rel="noopener">github.com/MichaelLLi/evalITR</a>。</p>
   </div>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
