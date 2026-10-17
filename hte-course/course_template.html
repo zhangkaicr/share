@@ -230,6 +230,35 @@ footer{
   section{page-break-inside:avoid}
 }
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -284,8 +313,9 @@ footer{
       <a href="#s10">10 · 讨论与教学要点</a>
       <a href="#s11">代码导航</a>
       <a href="#s12">术语与参考</a>
-    </div>
-  </nav>
+    </div><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span></nav>
 </div>
 
 <div class="wrap">
@@ -293,7 +323,7 @@ footer{
 <!-- ============ 开场 ============ -->
 <section id="s0">
   <span class="sec-no">开 场</span>
-  <h2>一个数字，两种命运</h2>
+  <h2 id="sec-一个数字-两种命运">一个数字，两种命运</h2>
   <p class="lead">为什么"总体无效"的研究，仍然可能藏着一个 NNT 只有 7.5 的人群？</p>
 
   <div class="stats">
@@ -317,7 +347,7 @@ footer{
     <b>异质性治疗效应（HTE）</b>关心的正是这个"角落"怎么找、怎么验证、以及怎么避免把自己骗了。
   </div>
 
-  <h3>你将带走什么</h3>
+  <h3 id="sec-你将带走什么">你将带走什么</h3>
   <ol>
     <li><b>看懂</b>：能从一篇 HTE 论文中读出"效应修饰因子"是怎么被挑出来的。</li>
     <li><b>会算</b>：用 <code>grf</code> 拟合因果森林、用 <code>WeightIt</code> 做 IPTW、用 <code>estimatr</code> 拿聚类稳健标准误。</li>
@@ -325,7 +355,7 @@ footer{
     <li><b>能复现</b>：拿到 10 段可独立运行的 R 脚本，从数据生成一路跑到 Table 2 汇总。</li>
   </ol>
 
-  <h3>建议课时安排（120 分钟）</h3>
+  <h3 id="sec-建议课时安排-120-分钟">建议课时安排（120 分钟）</h3>
   <table class="tbl-scroll">
     <thead><tr><th>时长</th><th>内容</th><th>对应章节</th></tr></thead>
     <tbody>
@@ -342,10 +372,10 @@ footer{
 <!-- ============ 第1章 ============ -->
 <section id="s1">
   <span class="sec-no">第 1 章</span>
-  <h2>研究背景：输血比例的"未解之争"</h2>
+  <h2 id="sec-研究背景-输血比例的-未解之争">研究背景：输血比例的"未解之争"</h2>
   <p class="lead">为什么同样是"高血浆比例"，不同研究结论不一？</p>
 
-  <h3>临床问题</h3>
+  <h3 id="sec-临床问题">临床问题</h3>
   <p>
     严重创伤大出血患者常需大量输血。理论上，早期补充血浆（FFP）可纠正创伤性凝血病，
     改善预后。因此临床普遍关注 <b>FFP:RBC 输注比例</b>——
@@ -363,7 +393,7 @@ footer{
     <b>异质性治疗效应（HTE）</b>，并识别<b>获益最大</b>的亚组。
   </div>
 
-  <h3>研究目标拆解（PICO）</h3>
+  <h3 id="sec-研究目标拆解-pico">研究目标拆解（PICO）</h3>
   <table class="tbl-scroll">
     <thead><tr><th>要素</th><th>定义（原文）</th></tr></thead>
     <tbody>
@@ -378,10 +408,10 @@ footer{
 <!-- ============ 第2章 ============ -->
 <section id="s2">
   <span class="sec-no">第 2 章</span>
-  <h2>研究设计与分析蓝图</h2>
+  <h2 id="sec-研究设计与分析蓝图">研究设计与分析蓝图</h2>
   <p class="lead">看懂 Fig.1 与 Fig.2，就掌握了这篇论文 80% 的骨架。</p>
 
-  <h3>2.1 分析概念模型（原文 Fig.1）</h3>
+  <h3 id="sec-2-1-分析概念模型-原文-fig-1">2.1 分析概念模型（原文 Fig.1）</h3>
   <p>
     这是本课的<b>总路线图</b>：先在<b>推导队列</b>（derivation cohort，2019–2021）里用因果森林
     "发现"异质性并圈定治疗靶点；再到<b>验证队列</b>（validation cohort，2022–2023）里
@@ -400,7 +430,7 @@ footer{
 
   <div class="grid2">
     <div class="card">
-      <h4>左半边：发现（Derivation）</h4>
+      <h4 id="sec-左半边-发现-derivation">左半边：发现（Derivation）</h4>
       <ul>
         <li>因果森林估计每位患者的 CATE</li>
         <li>按 CATE 五分位分层（Q1–Q5）</li>
@@ -409,7 +439,7 @@ footer{
       </ul>
     </div>
     <div class="card">
-      <h4>右半边：验证（Validation）</h4>
+      <h4 id="sec-右半边-验证-validation">右半边：验证（Validation）</h4>
       <ul>
         <li>把靶点定义套用到独立时段队列</li>
         <li>IPTW 加权估计风险差（RD）与 NNT</li>
@@ -425,7 +455,7 @@ footer{
     用时间上独立的队列验证，是这类研究最基本也最容易被忽略的防线。
   </div>
 
-  <h3>2.2 数据来源与患者筛选（原文 Fig.2）</h3>
+  <h3 id="sec-2-2-数据来源与患者筛选-原文-fig-2">2.2 数据来源与患者筛选（原文 Fig.2）</h3>
   <p>
     数据来自 <b>JTDB（Japan Trauma Data Bank，日本创伤数据库）</b>2019–2023 登记。
     纳入标准：成人、钝性创伤、ISS ≥ 16、接受过输血。排除穿透伤、年龄 &lt; 18 岁、
@@ -442,7 +472,7 @@ footer{
     </figcaption>
   </figure>
 
-  <h3>2.3 三个分析队列</h3>
+  <h3 id="sec-2-3-三个分析队列">2.3 三个分析队列</h3>
   <table class="tbl-scroll">
     <thead><tr><th>队列</th><th>时间</th><th>样本量</th><th>用途</th></tr></thead>
     <tbody>
@@ -464,10 +494,10 @@ footer{
 <!-- ============ 第3章 ============ -->
 <section id="s3">
   <span class="sec-no">第 3 章</span>
-  <h2>缺失数据与 missForest 插补</h2>
+  <h2 id="sec-缺失数据与-missforest-插补">缺失数据与 missForest 插补</h2>
   <p class="lead">创伤登记数据的现实：越危重的指标，越容易缺失。</p>
 
-  <h3>3.1 方法选择</h3>
+  <h3 id="sec-3-1-方法选择">3.1 方法选择</h3>
   <p>
     原文 Methods 明确说明：协变量缺失采用<b>非参数单一插补（missForest）</b>处理，
     并在<b>推导队列与验证队列中分别独立进行</b>——
@@ -493,7 +523,7 @@ footer{
     代价是计算慢，且单一插补未纳入插补不确定性——因此在敏感性分析中值得再检查。
   </div>
 
-  <h3>3.2 缺失比例（按原文 Table 脚注 / 正文报告）</h3>
+  <h3 id="sec-3-2-缺失比例-按原文-table-脚注-正文报告">3.2 缺失比例（按原文 Table 脚注 / 正文报告）</h3>
   <table class="tbl-scroll">
     <thead><tr><th>变量</th><th>缺失比例</th><th>说明</th></tr></thead>
     <tbody>
@@ -519,10 +549,10 @@ footer{
 <!-- ============ 第4章 ============ -->
 <section id="s4">
   <span class="sec-no">第 4 章</span>
-  <h2>因果森林：估计"这个人"的疗效</h2>
+  <h2 id="sec-因果森林-估计-这个人-的疗效">因果森林：估计"这个人"的疗效</h2>
   <p class="lead">从 ATE 到 CATE：把"平均人"拆成一个个具体的病人。</p>
 
-  <h3>4.1 估计目标的升级</h3>
+  <h3 id="sec-4-1-估计目标的升级">4.1 估计目标的升级</h3>
   <table class="tbl-scroll">
     <thead><tr><th>量</th><th>符号</th><th>含义</th><th>回答的问题</th></tr></thead>
     <tbody>
@@ -538,7 +568,7 @@ footer{
     因果森林做的，就是在协变量空间里<b>自适应地</b>寻找这些"相似的人"。
   </div>
 
-  <h3>4.2 森林为什么能做因果推断（重点）</h3>
+  <h3 id="sec-4-2-森林为什么能做因果推断-重点">4.2 森林为什么能做因果推断（重点）</h3>
   <p>普通预测森林优化预测精度；因果森林改造成估计<b>处理效应</b>，关键点有三：</p>
   <ol>
     <li>
@@ -566,7 +596,7 @@ footer{
     最后全体投票，得到每个病人个体的疗效估计与不确定度。
   </div>
 
-  <h3>4.3 <code>grf</code> 一行拟合（论文设定）</h3>
+  <h3 id="sec-4-3-grf-一行拟合-论文设定">4.3 <code>grf</code> 一行拟合（论文设定）</h3>
   <p>
     论文原话：训练 <b>5,000 棵树</b>，采用<b>诚实结构</b>，
     其余超参数使用 <b>grf 包默认值</b>。
@@ -599,7 +629,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
 <!-- ============ 第5章 ============ -->
 <section id="s5">
   <span class="sec-no">第 5 章</span>
-  <h2>结果①：异质性真的存在吗？（CATE 分布）</h2>
+  <h2 id="sec-结果-异质性真的存在吗-cate-分布">结果①：异质性真的存在吗？（CATE 分布）</h2>
   <p class="lead">原文 Fig.3 是整个 HTE 论证的第一块基石。</p>
 
   <figure class="figpaper">
@@ -613,7 +643,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     </figcaption>
   </figure>
 
-  <h3>怎么读这张图（讲课脚本）</h3>
+  <h3 id="sec-怎么读这张图-讲课脚本">怎么读这张图（讲课脚本）</h3>
   <ul>
     <li><b>横轴 CATE</b>：单位是风险差（本复现中换算为百分点 pp）。</li>
     <li><b>负值 = 获益</b>：因为结局是死亡，负值意味着高 FFP 组死亡风险更低。</li>
@@ -622,7 +652,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     <li><b>警惕</b>：双峰也可能来自过拟合噪声，因此必须再做<b>校准检验</b>与<b>独立队列验证</b>。</li>
   </ul>
 
-  <h3>R 复现：CATE 分布</h3>
+  <h3 id="sec-r-复现-cate-分布">R 复现：CATE 分布</h3>
   <figure class="figrep">
     <span class="tag r">R 复现</span>
     <img src="{{IMG:rep_fig3_cate.png}}" alt="复现 CATE 分布">
@@ -632,7 +662,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     </figcaption>
   </figure>
 
-  <h3>校准检验：异质性不是噪声（eFig.1）</h3>
+  <h3 id="sec-校准检验-异质性不是噪声-efig-1">校准检验：异质性不是噪声（eFig.1）</h3>
   <p>
     原文用<b>最佳线性预测子（best linear predictor）</b>在 OOB 预测上检验校准：
     把真实 ATE 对"森林预测均值"与"预测异质性"回归，
@@ -653,7 +683,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     </figcaption>
   </figure>
 
-  <h3>变量重要性：是谁在驱动异质性（eFig.2）</h3>
+  <h3 id="sec-变量重要性-是谁在驱动异质性-efig-2">变量重要性：是谁在驱动异质性（eFig.2）</h3>
   <figure class="figrep">
     <span class="tag r">R 复现</span>
     <img src="{{IMG:rep_efig2_vi.png}}" alt="复现变量重要性">
@@ -681,7 +711,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
 <!-- ============ 第6章 ============ -->
 <section id="s6">
   <span class="sec-no">第 6 章</span>
-  <h2>结果②：谁被判定为"最获益"？（原文 Table 1）</h2>
+  <h2 id="sec-结果-谁被判定为-最获益-原文-table-1">结果②：谁被判定为"最获益"？（原文 Table 1）</h2>
   <p class="lead">把黑箱的 CATE 翻译回临床语言。</p>
 
   <p>
@@ -692,7 +722,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     最终选定<b>乳酸与 GCS</b> 作为亚组分层的效应修饰因子。
   </p>
 
-  <h3>原文 Table 1（节选：核心行）</h3>
+  <h3 id="sec-原文-table-1-节选-核心行">原文 Table 1（节选：核心行）</h3>
   <table class="tbl-scroll">
     <thead>
       <tr>
@@ -731,7 +761,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     <b>休克/酸中毒（高乳酸）+ 意识障碍（低 GCS）+ 解剖损伤重（高 ISS）</b>的那批患者。
   </div>
 
-  <h3>R 复现：五分位梯度</h3>
+  <h3 id="sec-r-复现-五分位梯度">R 复现：五分位梯度</h3>
   <figure class="figrep">
     <span class="tag r">R 复现</span>
     <img src="{{IMG:rep_efig3_grad.png}}" alt="复现五分位梯度">
@@ -745,7 +775,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
 <!-- ============ 第7章 ============ -->
 <section id="s7">
   <span class="sec-no">第 7 章</span>
-  <h2>结果③：3×3 热图——把异质性浓缩成一条规则</h2>
+  <h2 id="sec-结果-3-3-热图-把异质性浓缩成一条规则">结果③：3×3 热图——把异质性浓缩成一条规则</h2>
   <p class="lead">原文 Fig.4：从"两张连续变量"到"临床可用的切点"。</p>
 
   <p>
@@ -767,7 +797,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     </figcaption>
   </figure>
 
-  <h3>R 复现：IPTW 风险差热图</h3>
+  <h3 id="sec-r-复现-iptw-风险差热图">R 复现：IPTW 风险差热图</h3>
   <figure class="figrep">
     <span class="tag r">R 复现</span>
     <img src="{{IMG:rep_fig4_heat.png}}" alt="复现热图">
@@ -777,7 +807,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     </figcaption>
   </figure>
 
-  <h3>热图逐格结果（复现，单位：百分点 pp）</h3>
+  <h3 id="sec-热图逐格结果-复现-单位-百分点-pp">热图逐格结果（复现，单位：百分点 pp）</h3>
   <table class="tbl-scroll">
     <thead>
       <tr>
@@ -811,7 +841,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     <b>敏感性分析</b>存在的理由。
   </div>
 
-  <h3>R 复现：平均 CATE 热图（eFig.4）</h3>
+  <h3 id="sec-r-复现-平均-cate-热图-efig-4">R 复现：平均 CATE 热图（eFig.4）</h3>
   <figure class="figrep">
     <span class="tag r">R 复现</span>
     <img src="{{IMG:rep_efig4_cate.png}}" alt="复现平均CATE热图">
@@ -825,7 +855,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
 <!-- ============ 第8章 ============ -->
 <section id="s8">
   <span class="sec-no">第 8 章</span>
-  <h2>结果④：验证队列中的确认（原文 Table 2 主分析）</h2>
+  <h2 id="sec-结果-验证队列中的确认-原文-table-2-主分析">结果④：验证队列中的确认（原文 Table 2 主分析）</h2>
   <p class="lead">发现于 2019–2021，确认于 2022–2023。</p>
 
   <p>
@@ -835,7 +865,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     以<b>稳健（sandwich）标准误</b>校正组内相关；并计算 <b>NNT 及其 CI</b>。
   </p>
 
-  <h3>原文 Table 2 · 主分析</h3>
+  <h3 id="sec-原文-table-2-主分析">原文 Table 2 · 主分析</h3>
   <table class="tbl-scroll">
     <thead>
       <tr><th>人群</th><th>样本量</th><th>高 FFP 组的 RD（95% CI）</th><th>NNT（95% CI）</th></tr>
@@ -854,7 +884,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     <b>复现时以 Table 2 为准。</b>
   </div>
 
-  <h3>本次 R 复现结果 vs 论文</h3>
+  <h3 id="sec-本次-r-复现结果-vs-论文">本次 R 复现结果 vs 论文</h3>
   <table class="tbl-scroll">
     <thead>
       <tr>
@@ -884,7 +914,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     → 差异仅 0.2 个百分点，方向、量级、显著性<b>完全一致</b>。
   </div>
 
-  <h3>IPTW 后的协变量平衡（Fig.5）</h3>
+  <h3 id="sec-iptw-后的协变量平衡-fig-5">IPTW 后的协变量平衡（Fig.5）</h3>
   <p>原文用 Love plot 展示加权前后标准化均数差（SMD）的变化。复现结果如下。</p>
 
   <div class="duo">
@@ -910,7 +940,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
 <!-- ============ 第9章 ============ -->
 <section id="s9">
   <span class="sec-no">第 9 章</span>
-  <h2>敏感性分析：结论有多"扛造"？</h2>
+  <h2 id="sec-敏感性分析-结论有多-扛造">敏感性分析：结论有多"扛造"？</h2>
   <p class="lead">三个敏感性分析，各自针对一个潜在的致命质疑。</p>
 
   <table class="tbl-scroll">
@@ -949,7 +979,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     </tbody>
   </table>
 
-  <h3>R 复现：IPTW 加权 Kaplan-Meier 曲线（eFig.6）</h3>
+  <h3 id="sec-r-复现-iptw-加权-kaplan-meier-曲线-efig-6">R 复现：IPTW 加权 Kaplan-Meier 曲线（eFig.6）</h3>
   <div class="duo">
     <figure class="figrep">
       <span class="tag r">R 复现 eFig.6a</span>
@@ -972,7 +1002,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
 <!-- ============ 第9.5章 因果森林 ============ -->
 <section id="s45">
   <span class="sec-no">第 4 章 · 图</span>
-  <h2>因果森林的输出长什么样</h2>
+  <h2 id="sec-因果森林的输出长什么样">因果森林的输出长什么样</h2>
   <p class="lead">Fig.1 概念模型（复现）、CATE 分布（原文/复现）、校准与变量重要性。</p>
 
   <div class="duo">
@@ -992,17 +1022,17 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
 <!-- ============ 第10章 ============ -->
 <section id="s10">
   <span class="sec-no">第 10 章</span>
-  <h2>讨论、局限与教学要点</h2>
+  <h2 id="sec-讨论-局限与教学要点">讨论、局限与教学要点</h2>
   <p class="lead">方法学上，这篇论文真正值得学习（和警惕）的地方。</p>
 
-  <h3>10.1 原文讨论要点（Key observation）</h3>
+  <h3 id="sec-10-1-原文讨论要点-key-observation">10.1 原文讨论要点（Key observation）</h3>
   <ul>
     <li>在需要输血的严重钝性创伤患者中，高 FFP:RBC 比例存在<b>异质性治疗效应</b>。</li>
     <li>识别出的治疗靶点（<b>GCS ≤ 12 且乳酸 ≥ 4.5 mmol/L</b>）死亡率下降显著更大。</li>
     <li>用<b>常规可得的临床指标</b>来指导输血策略，可能改善预后。</li>
   </ul>
 
-  <h3>10.2 优势与临床意义</h3>
+  <h3 id="sec-10-2-优势与临床意义">10.2 优势与临床意义</h3>
   <ul>
     <li>用因果森林<b>超越"平均值分析"</b>，探索效应异质性。</li>
     <li>与传统亚组方法不同：机器学习方法<b>无需预先定义分层</b>，即可发现个体层面的变异。</li>
@@ -1010,17 +1040,17 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     <li>可实现<b>靶向血浆复苏</b>，改善预后并优化血液制品资源使用。</li>
   </ul>
 
-  <h3>10.3 机制解释（Interpretation）</h3>
+  <h3 id="sec-10-3-机制解释-interpretation">10.3 机制解释（Interpretation）</h3>
   <div class="grid2">
     <div class="card">
-      <h4>高乳酸 → 休克/低灌注</h4>
+      <h4 id="sec-高乳酸-休克-低灌注">高乳酸 → 休克/低灌注</h4>
       <p>
         提示组织低灌注与休克，通过内皮活化、炎症反应与糖萼降解，
         成为创伤性凝血病的主要触发因素，导致凝血障碍与出血风险升高。
       </p>
     </div>
     <div class="card">
-      <h4>意识障碍 → 创伤性脑损伤（TBI）</h4>
+      <h4 id="sec-意识障碍-创伤性脑损伤-tbi">意识障碍 → 创伤性脑损伤（TBI）</h4>
       <p>
         很可能反映 TBI：以组织因子释放与纤溶亢进为特征，
         这种早发凝血病可能需要以血浆为基础的复苏。
@@ -1028,7 +1058,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     </div>
   </div>
 
-  <h3>10.4 局限性（课堂辩论材料）</h3>
+  <h3 id="sec-10-4-局限性-课堂辩论材料">10.4 局限性（课堂辩论材料）</h3>
   <ol>
     <li>
       <b>观察性研究</b>：基于登记数据，<b>不能直接推断因果</b>。
@@ -1060,7 +1090,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     g-methods 处理时间依赖性混杂。
   </div>
 
-  <h3>10.5 三大偏倚与永恒时间偏倚（本课的"防骗清单"）</h3>
+  <h3 id="sec-10-5-三大偏倚与永恒时间偏倚-本课的-防骗清单">10.5 三大偏倚与永恒时间偏倚（本课的"防骗清单"）</h3>
   <table class="tbl-scroll">
     <thead><tr><th>偏倚</th><th>本质</th><th>本课案例中的表现</th><th>防线</th></tr></thead>
     <tbody>
@@ -1102,7 +1132,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
 <!-- ============ 代码导航 ============ -->
 <section id="s11">
   <span class="sec-no">代码导航</span>
-  <h2>10 段脚本，一条流水线</h2>
+  <h2 id="sec-10-段脚本-一条流水线">10 段脚本，一条流水线</h2>
   <p class="lead">跟着论文行文顺序走，每一步都能单独跑。</p>
 
   <div class="steps">
@@ -1149,7 +1179,7 @@ cate_oob &lt;- <span class="fn">predict</span>(cf)$predictions   <span class="cm
     </div>
   </div>
 
-  <h3>怎么跑</h3>
+  <h3 id="sec-怎么跑">怎么跑</h3>
   <pre><code><span class="cm"># 一键跑完整条流水线（约 4~6 分钟）</span>
 Rscript scripts/run_all.R
 
@@ -1166,7 +1196,7 @@ Rscript scripts/04_causal_forest.R
     <b>STEP 2 ~ STEP 10 一行都不用改</b>。
   </div>
 
-  <h3>关键函数用法速查</h3>
+  <h3 id="sec-关键函数用法速查">关键函数用法速查</h3>
   <table class="tbl-scroll">
     <thead><tr><th>函数</th><th>关键参数</th><th>作用</th></tr></thead>
     <tbody>
@@ -1189,9 +1219,9 @@ Rscript scripts/04_causal_forest.R
 <!-- ============ 术语与参考 ============ -->
 <section id="s12">
   <span class="sec-no">附录</span>
-  <h2>术语表与参考</h2>
+  <h2 id="sec-术语表与参考">术语表与参考</h2>
 
-  <h3>术语表</h3>
+  <h3 id="sec-术语表">术语表</h3>
   <table class="tbl-scroll">
     <thead><tr><th>术语</th><th>英文</th><th>含义</th></tr></thead>
     <tbody>
@@ -1211,7 +1241,7 @@ Rscript scripts/04_causal_forest.R
     </tbody>
   </table>
 
-  <h3>关键数字速查（论文 vs 复现）</h3>
+  <h3 id="sec-关键数字速查-论文-vs-复现">关键数字速查（论文 vs 复现）</h3>
   <table class="tbl-scroll">
     <thead><tr><th>指标</th><th>论文</th><th>R 复现</th></tr></thead>
     <tbody>
@@ -1228,7 +1258,7 @@ Rscript scripts/04_causal_forest.R
     </tbody>
   </table>
 
-  <h3>参考文献</h3>
+  <h3 id="sec-参考文献">参考文献</h3>
   <ol>
     <li>Fujiwara G, Inoue K, Ishii W, et al. Therapeutic target of high fresh frozen plasma to red blood cell ratio in severe blunt trauma. <i>Critical Care</i>. 2025;29:436. DOI: 10.1186/s13054-025-05678-z</li>
     <li>Athey S, Tibshirani J, Wager S. Generalized random forests. <i>Annals of Statistics</i>. 2019;47(2):1148–1178.</li>
@@ -1258,5 +1288,6 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+<script src="search.js"></script>
 </body>
 </html>
