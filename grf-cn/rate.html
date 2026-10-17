@@ -133,6 +133,35 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -142,7 +171,9 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 
 <div class="wrap">
   <div class="topbar">
-    <a class="back" href="index.html">&larr; grf 教程总览</a>
+    <a class="back" href="index.html">&larr; grf 教程总览</a><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span>
   </div>
   <h1>《用 RATE 评估异质性》</h1>
   <p class="sub">原文：<a href="https://grf-labs.github.io/grf/articles/rate.html" target="_blank" rel="noopener">Assessing heterogeneity with RATE</a>（英文）&nbsp;·&nbsp;grf 官方文档中文译本</p>
@@ -152,7 +183,7 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 <div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">grf</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)</pre></div>
 <div id="treatment-prioritization-rules" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-处理优先规则">
 <a href="#treatment-prioritization-rules" class="anchor"></a>处理优先规则</h2>
 <p>我们考虑一个大家都很熟悉的情形：在随机化试验（或满足无混杂假设的观察性研究）中，想要决定应该把二值处理（binary treatment）<span class="math inline">\(W=\{0, 1\}\)</span> 分配给哪些个体，以及这种分配策略究竟有多大价值。给定某些个体特征 <span class="math inline">\(X_i\)</span>，我们有一个针对个体的<em>处理优先规则</em> <span class="math inline">\(S(X_i)\)</span>，它会为每个个体打一个分数。这个优先规则应当给"我们认为处理获益很大"的个体打高分，给"处理获益很小"的个体打低分。这里说的"处理获益"，是指给定个体特征 <span class="math inline">\(X_i\)</span> 后，接受处理带来的结局（outcome）<span class="math inline">\(Y\)</span> 上的差异，也就是条件平均处理效应（CATE，conditional average treatment effect）</p>
 <p><span class="math display">\[\tau(x) = E[Y_i(1) - Y_i(0) \,|\, X_i =
@@ -167,7 +198,7 @@ x],\]</span> 其中 <span class="math inline">\(Y(1)\)</span> 和 <span class="m
 </div>
 
 <div id="quantifying-treatment-benefit-the-targeting-operator-characteristic" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-量化处理获益-靶向作用特征曲线-targeting-operator-chara">
 <a href="#quantifying-treatment-benefit-the-targeting-operator-characteristic" class="anchor"></a>量化处理获益：靶向作用特征曲线（Targeting Operator Characteristic）</h2>
 <p>如上一节所述，我们关心的是"是否存在异质性"，以及"利用这种异质性、按优先规则 <span class="math inline">\(S(X_i)\)</span> 来做处理定向能带来多大获益"。这里说的"获益"，是指：与其随机挑选同等比例的人群去处理，不如把处理集中给优先分数 <span class="math inline">\(S(X_i)\)</span> 最高的那部分人，从而期望带来的结局提升。</p>
 <p>为了构造一个合适的指标来评估这件事，先来点直观的可视化会很有帮助。一个合理的做法是：按 <span class="math inline">\(S(X_i)\)</span> 把人群切成若干组，然后把这些组里的 ATE 与"给所有人处理"的总体 ATE 作比较，再把结果画出来。这正是<em>靶向作用特征曲线</em>（TOC，Targeting Operator Characteristic）所做的事——其中每一组，就是优先分数 <span class="math inline">\(S(X_i)\)</span> 排名前 q 比例的那部分个体。</p>
@@ -186,7 +217,7 @@ F^{-1}_{S(X_i)}(1 - q)]\\
 <p>注意看：在接受处理的最初几个个体上，TOC 的值非常高。这很直观，因为我们的玩具 CATE 服从均值为 0 的正态分布；如果我们只挑出处理效应大于 <span class="math inline">\(z_{0.95}\)</span> 的前 5% 个体来治疗，那么相比"给所有人治疗"（效应为 0），获益是很大的。但随着曲线向右延伸，越来越多处理效应较低的人混进来，我们逐渐逼近 ATE，直到 <span class="math inline">\(q=1\)</span> 时与之相等。</p>
 </div>
 <div id="rate-the-area-under-the-toc" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-rate-toc-下方的面积">
 <a href="#rate-the-area-under-the-toc" class="anchor"></a>RATE：TOC 下方的面积</h2>
 <p>上图自然地提示了一个总结 TOC 曲线的方式——既然 <span class="math inline">\(S(X_i)\)</span> 的作用是按处理获益对个体排序，那么只要把曲线下方的面积加起来即可。这正是 <strong>RATE</strong> 的定义：它是 TOC 下方的<em>面</em>积（<em>A</em>rea <em>U</em>nder the <em>TOC</em>，简称 "AUTOC"）。</p>
 <p><span class="math display">\[\textrm{RATE} = \int_0^1 \textrm{TOC}(q)
@@ -203,7 +234,7 @@ dq .\]</span> 如果 <span class="math inline">\(\tau(X_i)\)</span> 几乎不存
 </div>
 
 <div id="estimating-the-rate" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-估计-rate">
 <a href="#estimating-the-rate" class="anchor"></a>估计 RATE</h2>
 <p>上一节的概览是在一个理想化的设定下介绍的——我们假设自己已经知道了 <span class="math inline">\(\tau(X_i)\)</span>。实际操作中这些量必须被估计出来，而相应的<em>可行定义</em>（以 <span class="math inline">\(S(X_i) = \hat \tau(X_i)\)</span> 为例）是：TOC 曲线在测试集 <span class="math inline">\(X^{test}\)</span> 上，按照在训练集上估计出的 CATE 函数 <span class="math inline">\(\hat \tau^{train}(\cdot)\)</span> 对所有观测排序，再把由 <span class="math inline">\(\hat
 \tau^{train}(X^{test})\)</span> 优先出的前 q 比例个体，其 ATE 与总体 ATE 进行比较：</p>
@@ -219,7 +250,7 @@ Y^{test}_i(0)],
 \tau^{train}(X^{test})\)</span> 的经验分布函数。<code>rank_average_treatment_effect</code> 函数借助一个在独立评估集上训练的森林，给出 TOC 与 RATE 的 AIPW 风格<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>双稳健（doubly robust）估计量。关于该双稳健估计量及其相应中心极限定理的推导细节，参见 Yadlowsky 等人 (2025)。</p>
 </div>
 <div id="an-application-to-sprint-and-accord" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-sprint-与-accord-的一个应用">
 <a href="#an-application-to-sprint-and-accord" class="anchor"></a>SPRINT 与 ACCORD 的一个应用</h2>
 <p>为了说明 RATE，我们考虑一个来自医学场景的示例应用。两项大规模随机试验 <em>ACCORD</em>（ACCORD Study Group, 2010）和 <em>SPRINT</em>（SPRINT Research Group, 2015）在相似的人群上开展，都旨在衡量一种高血压治疗的疗效，却得出了不同的结论：SPRINT 发现治疗有效，而 ACCORD 发现治疗无效。对此已有多种解释被提出，这里我们特别关注其中一种：即差异源于<em>处理效应的异质性</em>这一假设（参见 Yadlowsky 等人, 2025 的参考文献）。</p>
 <p>这个假设在上节的基础上有一个可被检验的推论：如果确实存在显著的异质性，并且我们能用有力的 CATE 估计器有效地估计出它们，那么在 ACCORD 和 SPRINT 上估计出的 RATE 应当为正且显著。具体来说，我们的设定给出了如下"菜谱"：</p>
@@ -293,12 +324,12 @@ Y^{test}_i(0)],
 </div>
 
 <div id="funding" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-资助">
 <a href="#funding" class="anchor"></a>资助</h2>
 <p>GRF 中 RATE 功能的开发部分得到了美国国立卫生研究院（National Institutes of Health）5R01HL144555 号基金的资助。</p>
 </div>
 <div id="references" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-参考文献">
 <a href="#references" class="anchor"></a>参考文献</h2>
 <p>ACCORD Study Group. Effects of Intensive Blood-Pressure Control in Type 2 Diabetes Mellitus. <em>New England Journal of Medicine</em>, 362(17):1575–1585, 2010.</p>
 <p>Susan Athey and Stefan Wager. Estimating Treatment Effects with Causal Forests: An Application. <em>Observational Studies</em>, 5, 2019.</p>
@@ -318,5 +349,6 @@ Y^{test}_i(0)],
     <p>本页为 <a href="https://grf-labs.github.io/grf/articles/rate.html" target="_blank" rel="noopener">grf 官方文档</a> 的中文译本，原文版权归 grf 作者所有，依据项目许可（MIT）翻译并注明出处，仅供学习交流。代码与公式保持原样，译文新增的「背景与解释」框为译者补充。</p>
   </div>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
