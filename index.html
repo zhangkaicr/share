@@ -91,6 +91,19 @@ a{color:var(--accent)}
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 
+
+/* 全局搜索入口 */
+.global-search-entry{display:block;text-decoration:none;background:var(--card,#181b22);
+ border:1px solid var(--line,#2a2f3a);border-radius:12px;padding:18px 22px;margin:22px 0 6px;
+ transition:border-color .16s,transform .16s}
+.global-search-entry:hover{border-color:#5ad1a0;transform:translateY(-1px)}
+.global-search-entry .gs-h{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.global-search-entry .gs-ico{font-size:18px}
+.global-search-entry .gs-t{font-size:16px;font-weight:600;color:var(--text,#e4e6ea)}
+.global-search-entry .gs-d{font-size:13.5px;color:var(--muted,#98a0ac);line-height:1.6}
+.global-search-entry .gs-tags{margin-top:9px;display:flex;gap:6px;flex-wrap:wrap}
+.global-search-entry .gs-tags span{font-size:11.5px;color:var(--muted,#98a0ac);
+ border:1px solid var(--line,#2a2f3a);border-radius:5px;padding:1px 8px}
 </style>
 </head>
 <body>
@@ -105,6 +118,12 @@ a{color:var(--accent)}
     <p class="sub">因果推断 · 目标试验模拟 · 临床研究方法的讲义与代码复现物料</p>
     <p class="repo">github.com/zhangkaicr/share</p>
   </header>
+
+  <a class="global-search-entry" href="search.html">
+    <div class="gs-h"><span class="gs-ico">&#128269;</span><span class="gs-t">全局搜索 · 检索全部 12 个教程库</span></div>
+    <div class="gs-d">跨库全文检索 39 个页面、345 个小节的文字内容（不含代码块）。各库内部另有独立的站内搜索。</div>
+    <div class="gs-tags"><span>交叉验证</span><span>倾向得分</span><span>异质处理效应</span><span>策略树</span><span>Qini 曲线</span><span>因果森林</span></div>
+  </a>
 
   <h2>包教程译本</h2>
   <a class="card" href="policytree-cn/">
@@ -230,19 +249,6 @@ a{color:var(--accent)}
       <span class="tag">集成学习</span>
       <span class="tag">不依从 · PATT</span>
       <span class="tag">背景注释</span>
-    </div>
-  </a>
-
-  <a class="card" href="hte-review-cn/">
-    <h3>用异质性治疗效应估计模拟随机临床试验：方法学综述与基准测试</h3>
-    <p>J Biomed Inform（2023;137:104256）全文中文译本。系统梳理双重机器学习、元学习器（S/T/X/R-learner）、表示学习与因果森林等 11 类 HTE 方法，并用约 6000 万人的全国性索赔数据在真实 RCT（NCT03991988）上做基准测试——结论是结构最简单的 S-learner + 随机森林反而最稳健。</p>
-    <div class="meta">
-      <span class="tag k">HTE</span>
-      <span class="tag">J Biomed Inform</span>
-      <span class="tag">双重机器学习</span>
-      <span class="tag">Meta-learner · 因果森林</span>
-      <span class="tag">目标试验模拟</span>
-      <span class="tag">CC BY 4.0</span>
     </div>
   </a>
 
