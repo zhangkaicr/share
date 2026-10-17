@@ -131,6 +131,35 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -140,13 +169,15 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 
 <div class="wrap">
   <div class="topbar">
-    <a class="back" href="../index.html">&larr; 返回 share 总览</a>
+    <a class="back" href="../index.html">&larr; 返回 share 总览</a><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span>
   </div>
   <h1>Meta-Learner（元学习器）方法综述：异质处理效应估计与最优治疗推荐</h1>
   <p class="sub">原文：<a href="https://jzhou.org/posts/metalearner/" target="_blank" rel="noopener">Meta-Learners</a>（英文）&nbsp;·&nbsp;作者 Junyi Zhou（周骏毅），发布于 2022-02-22，最后更新 2022-12-11&nbsp;·&nbsp;非官方中文译本</p>
 
   <div class="rulebox">
-    <h3>配套 R 包</h3>
+    <h3 id="sec-配套-r-包">配套 R 包</h3>
     <p>同一作者还提供了一个与本文配套的 Meta-learner R 包，可在 <a href="https://github.com/junyzhou10/MetaLearners" target="_blank" rel="noopener" style="color:#0c2c2a;text-decoration:underline">Github（junyzhou10/MetaLearners）</a> 获取。</p>
   </div>
 
@@ -212,7 +243,7 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 <p>多数因果推断文献都在<strong>双臂（two-arm）</strong>设置下研究处理效应估计，详见我的另一篇文章<a href="https://jzhou.org/posts/reviewcausal/">《因果推断综述：概览》</a>。本文则在更一般的设置下展开：可能存在多个处理臂（multi-arm）。</p>
 
 <div id="q-learning" class="section level2" number="2.1">
-<h2><span class="header-section-number">2.1</span> Q-learning</h2>
+<h2 id="sec-2-1-q-learning"><span class="header-section-number">2.1</span> Q-learning</h2>
 <p>Q-learning 之所以得名，是因为它的目标函数扮演了与强化学习中的 Q 函数（或奖励函数）类似的角色 <span class="citation">(<a href="#ref-murphy2003optimal">Murphy 2003</a>; <a href="#ref-murphy2005generalization">Murphy 2005a</a>; <a href="#ref-sutton2018reinforcement">Sutton and Barto 2018</a>)</span>，并被广泛用于估计最优<em>动态治疗策略（dynamic treatment regime）</em> <span class="citation">(<a href="#ref-murphy2001marginal">Murphy et al. 2001</a>; <a href="#ref-murphy2003optimal">Murphy 2003</a>, <a href="#ref-murphy2005experimental">2005b</a>; <a href="#ref-qian2011performance">Qian and Murphy 2011</a>; <a href="#ref-robins2004optimal">Robins 2004</a>; <a href="#ref-schulte2014q">Schulte et al. 2014</a>)</span>。Q-learning 的基本思想是估计<strong>条件响应曲面（conditional response surface）</strong> <span class="math inline">\(E[Y \mid \mathbf X, T]\)</span>，其中 <span class="math inline">\(Y\)</span> 是连续型结局，<span class="math inline">\(\mathbf X\)</span> 表示基线协变量，<span class="math inline">\(T\)</span> 是处理分配。在双臂情形下，通常 <span class="math inline">\(T\in\{0,1\}\)</span>；而若有 <span class="math inline">\(K\)</span> 个处理选项，则 <span class="math inline">\(T\in\{1,2,...,K\}\)</span>。得到 Q 函数之后，便可以通过对这些 Q 函数作对比来估计处理效应。在文献中，Q-learning 也被称为 <strong>g-计算（g-computation）</strong> <span class="citation">(<a href="#ref-robins1986new">Robins 1986</a>)</span>，或参数化 g-公式（parametric g-formula）<span class="citation">(<a href="#ref-hernan2010causal">Hernán and Robins 2010</a>)</span>。尽管就处理效应估计而言它是一种「间接」方法，但在实践中表现极具竞争力，尤其当<strong>无混杂（unconfoundedness）</strong>假设成立时 <span class="citation">(<a href="#ref-chatton2020g">Chatton et al. 2020</a>)</span>。</p>
 
 <div class="note">
@@ -224,7 +255,7 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 <p>具体而言，为了估计 Q 函数，我们考虑两种途径：一种是 Single（单一）或 S-learner，另一种是 Two（双）或 T-learner——沿用 <span class="citation">Künzel et al. (<a href="#ref-kunzel2019metalearners">2019</a>)</span> 的命名。两种方法在双臂或多臂设置下都能轻松实现。值得注意的是，这里的 S-、T-，以及后面的 X-、R-learner，都仅仅是处理效应估计的<strong>通用框架</strong>；在实践中，人们需要针对自己的科学问题挑选合适的基学习器（如随机森林、BART、XGBoost 等）来实现这些学习器。</p>
 
 <div id="s-learner" class="section level3" number="2.1.1">
-<h3><span class="header-section-number">2.1.1</span> S-learner</h3>
+<h3 id="sec-2-1-1-s-learner"><span class="header-section-number">2.1.1</span> S-learner</h3>
 <p>对于 <strong>S-learner</strong>，我们估计一个联合函数 <span class="math inline">\(\hat\mu(\mathbf X, T) = E[Y \mid \mathbf X, T]\)</span>，其中 <span class="math inline">\(T \in \{1, 2,...,K\}\)</span>，那么处理 <span class="math inline">\(i\)</span> 与 <span class="math inline">\(j\)</span>（<span class="math inline">\(i\neq j\)</span>）之间的 HTE 可由下式得到
 <span class="math display">\[\begin{equation}
 \hat\tau_i^{(j)}(\mathbf X) = \hat\mu(\mathbf X, j) - \hat\mu(\mathbf X, i). \label{eq:Slearner}
@@ -233,7 +264,7 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 </div>
 
 <div id="t-learner" class="section level3" number="2.1.2">
-<h3><span class="header-section-number">2.1.2</span> T-learner</h3>
+<h3 id="sec-2-1-2-t-learner"><span class="header-section-number">2.1.2</span> T-learner</h3>
 <p>相比之下，<strong>T-learner</strong> 估计的 <span class="math inline">\(E[Y \mid \mathbf X, T]\)</span> 只用到了观测数据的一部分。例如，当有 <span class="math inline">\(K\)</span> 个处理时，总共需要估计 <span class="math inline">\(K\)</span> 个函数，即 <span class="math inline">\(\mu_k(\mathbf X) = E[Y \mid \mathbf X, T= k]\)</span>（<span class="math inline">\(k=1,...,K\)</span>）。于是 HTE 可计算为
 <span class="math display">\[\begin{equation}
 \hat\tau_i^{(j)}(\mathbf X) = \hat\mu_j(\mathbf X) - \hat\mu_{i}(\mathbf X)\label{eq:Tlearner}
@@ -244,11 +275,11 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 </div>
 
 <div id="a-learning" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> A-learning</h2>
+<h2 id="sec-2-2-a-learning"><span class="header-section-number">2.2</span> A-learning</h2>
 <p>优势学习（advantage-learning）或称 <strong>A-learning</strong>，与 <strong>Q-learning</strong> 的主要区别在于：它直接估计我们<strong>目标中的处理效应</strong> <span class="math inline">\(\tau(\mathbf x)\)</span>。不同于 Q-learning 在理解与实现上都直来直去，A-learning 需要先把未被观测到的处理效应（例如 ITE）形式化表达出来，再做估计。X-learner 与 R-learner 都属于这一框架。这两种方法最初都是为双处理（two treatments）情形提出的，因此本文把它们推广到了多臂设置。</p>
 
 <div id="x-learner" class="section level3" number="2.2.1">
-<h3><span class="header-section-number">2.2.1</span> X-learner</h3>
+<h3 id="sec-2-2-1-x-learner"><span class="header-section-number">2.2.1</span> X-learner</h3>
 <p><strong>X-learner</strong> <span class="citation">(<a href="#ref-kunzel2019metalearners">Künzel et al. 2019</a>)</span> 兼具 T-learner 的简洁，却通过「直接瞄准处理效应而非响应曲面」解决了后者的数据效率问题。在双处理情形下（将两个处理记为 <span class="math inline">\(1\)</span> 与 <span class="math inline">\(-1\)</span>），其主要步骤如下：</p>
 <ul>
 <li>第 1 步：像 T-learner 那样估计 <span class="math inline">\(\hat\mu_1(\cdot)\)</span> 与 <span class="math inline">\(\hat\mu_{-1}(\cdot)\)</span>；</li>
@@ -267,7 +298,7 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 </div>
 
 <div id="r-learner" class="section level3" number="2.2.2">
-<h3><span class="header-section-number">2.2.2</span> R-learner</h3>
+<h3 id="sec-2-2-2-r-learner"><span class="header-section-number">2.2.2</span> R-learner</h3>
 <p><strong>R-learner</strong> <span class="citation">(<a href="#ref-NieQuasi2020">Nie and Wager 2020</a>)</span> 借助 Robinson 分解（Robinson’s decomposition）<span class="citation">(<a href="#ref-robinson1988root">Robinson 1988</a>)</span>，把 HTE 与可观测量 <span class="math inline">\(\{Y, \mathbf X, T\}\)</span> 联系起来：
 <span class="math display" id="eq:Rlearner">\[\begin{equation}
 E[Y\mid \mathbf X, T] = m(\mathbf X) + (1[T = 1]- \pi(\mathbf X))\tau(\mathbf X) \tag{2.1}
@@ -289,7 +320,7 @@ E[Y\mid \mathbf X, T] = m(\mathbf X) + (1[T = 1]- \pi(\mathbf X))\tau(\mathbf X)
 </div>
 
 <div id="reference-free-r-learner" class="section level3" number="2.2.3">
-<h3><span class="header-section-number">2.2.3</span> 无参照组 R-learner（Reference-free R-learner）</h3>
+<h3 id="sec-2-2-3-无参照组-r-learner-reference-free-r-le"><span class="header-section-number">2.2.3</span> 无参照组 R-learner（Reference-free R-learner）</h3>
 <p>为了解决 R-learner 中的「推荐不一致」问题，作者提出了一种称为<strong>无参照组 R-learner（reference-free R-learner）</strong>的新方法 <span class="citation">(<a href="#ref-Zhou_2022">Zhou et al. 2023</a>)</span>，它允许我们在<strong>不指定特定参照组</strong>的情况下估计处理效应并推荐最优治疗。如此一来，不一致的问题便不再是一个顾虑。</p>
 <p>无参照组学习器的精髓，是把 HTE <span class="math inline">\(\boldsymbol \tau^{(k)}\)</span> 重新表述为潜在结局 <span class="math inline">\(Y^{(k)}\)</span> 与（实际观测到的）结局 <span class="math inline">\(Y\)</span> 之间的对照，定义为
 <span class="math display" id="eq:newTau">\[\begin{equation}
@@ -315,7 +346,7 @@ E[Y \mid T, \mathbf{X}] &amp;= E\left[ \sum_{k=1}^{K} 1[T=k]Y^{(k)} \;\middle|\;
 </div>
 
 <div id="de-centralized-learner" class="section level3" number="2.2.4">
-<h3><span class="header-section-number">2.2.4</span> de-Centralized-Learner</h3>
+<h3 id="sec-2-2-4-de-centralized-learner"><span class="header-section-number">2.2.4</span> de-Centralized-Learner</h3>
 <p>（作者提出了一种为因果推断分析而结构化的学习器。易于实现，且相比其他元学习器具有更优的性能。更多细节请等待论文正式发表。）</p>
 <hr />
 </div>
@@ -345,11 +376,11 @@ j &amp; \quad \text{if } \hat\tau_j^{(k)}(\mathbf{X})&lt;0 \text{ for } k \neq j
 但正如前面所提到的，<span class="math inline">\(j\)</span> 的选取会导致不同的 <span class="math inline">\(\hat{\boldsymbol \tau}_j\)</span> 集合，相应地也会得到不同的最优推荐 <span class="math inline">\(T^{\text{opt}}\)</span>。也就是说，治疗组（参照组）的选择可能引起各种各样的最优推荐结果。</p>
 
 <div id="optimal-treatment-regimes" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> 最优治疗策略（Optimal Treatment Regimes）</h2>
+<h2 id="sec-3-1-最优治疗策略-optimal-treatment-regimes"><span class="header-section-number">3.1</span> 最优治疗策略（Optimal Treatment Regimes）</h2>
 <p>基于元学习器的方法，是先估计处理效应、再据此确定最优治疗，从而找到最优治疗策略的。然而，另一支方法则绕开了「估计处理效应」这一步，直接去寻找最优治疗策略。它们把问题重塑为一个<strong>加权分类（weighted classification）</strong>问题，于是许多分类工具——如 SVM 与树模型——都可以被用来求解 <span class="citation">(<a href="#ref-qian2011performance">Qian and Murphy 2011</a>; <a href="#ref-xu2015regularized">Xu et al. 2015</a>; <a href="#ref-zhao2012estimating">Zhao et al. 2012</a>; <a href="#ref-zhu2017greedy">Zhu et al. 2017</a>)</span>。这些方法的基本思想，请参见我的另一篇<a href="https://jzhou.org/posts/reviewcausal/#individualized-treatment-rule">文章</a>。</p>
 
 <div id="optimal-dynamic-treatment-regimes-dtr" class="section level3" number="3.1.1">
-<h3><span class="header-section-number">3.1.1</span> 最优动态治疗策略（DTR）</h3>
+<h3 id="sec-3-1-1-最优动态治疗策略-dtr"><span class="header-section-number">3.1.1</span> 最优动态治疗策略（DTR）</h3>
 <p>在整项工作中，我们都聚焦于「只干预一次」的研究。然而在实践中，可能会发生多阶段的干预，因此如何确定最优的治疗序列，便成为一个很自然的问题。需要强调的是：不能简单地在每个阶段都给受试者施以「该阶段的最优治疗」，因为不同阶段的治效可能相互影响，而那种「贪心算法式」的思路无法解释<strong>延滞效应（carry-over effect）</strong>。借助动态规划（dynamic programming），学界提出了用 Q-learning 与 A-learning 从<strong>序贯多分配随机试验（SMART, Sequential, Multiple, Assignment Randomized Trials）</strong>中学习最优 DTR <span class="citation">(<a href="#ref-lavori2000design">Lavori and Dawson 2000</a>; <a href="#ref-murphy2005experimental">Murphy 2005b</a>; <a href="#ref-nahum2012experimental">Nahum-Shani et al. 2012</a>)</span>。如果在具备恰当的因果假设下，我们也可以借助元学习器从观察性研究中学习 DTR。由于这是一个庞大的话题，我在另一篇<a href="https://jzhou.org/posts/optdtr/">文章</a>中结合一些示例代码作了详细阐述。</p>
 
 <div class="note">
@@ -467,5 +498,6 @@ Zhu, R., Zhao, Y.-Q., Chen, G., Ma, S., and Zhao, H. (2017), <span>“Greedy out
     本页为对 Junyi Zhou（周骏毅）原文 <a href="https://jzhou.org/posts/metalearner/" target="_blank" rel="noopener">Meta-Learners</a> 的非官方中文翻译，仅供学习交流。版权归原作者所有；译文中的「背景与解释」注释为译者所加，不代表原作者观点。文中的数学公式、参考文献及外链均保留原始出处。
   </div>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
