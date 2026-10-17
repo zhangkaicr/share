@@ -19,7 +19,6 @@
 | [`bocf-cn/`](bocf-cn/) | 《BOCF 方法再审视》—— PMC2819899（Patient Preference and Adherence, 2010）中文译本，比较 MMRM / LOCF / BOCF / mBOCF / aeBOCF 五种缺失数据处理方法，补充「背景与解释」框，明暗可切换 |
 | [`model4you-cn/`](model4you-cn/) | 《model4you：个体化治疗效应估计的 R 包》—— JORS 2019 文章中文译本，模型树 + 个体化模型两件套 |
 | [`hte-course/`](hte-course/) | 公开课《平均值的谎言：谁真正受益？》—— 异质性治疗效应（HTE）完整讲义 + 10 段 R 复现脚本索引 |
-| [`hte-review-cn/`](hte-review-cn/) | 《利用异质性治疗效应估计模拟随机临床试验》—— J Biomed Inform（2023;137:104256）HTE 方法学综述与基准测试中文译本（双重机器学习 / 元学习器 / 表示学习 / 因果森林，含全国性索赔数据 AD 药物再利用基准实验） |
 | `index.html` | 站点导航首页 |
 
 每个子项目自成一个文件夹，互不干扰，用 GitHub Pages 发布后可独立访问。
