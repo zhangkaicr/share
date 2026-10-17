@@ -133,6 +133,35 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -142,7 +171,9 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 
 <div class="wrap">
   <div class="topbar">
-    <a class="back" href="index.html">&larr; grf 教程总览</a>
+    <a class="back" href="index.html">&larr; grf 教程总览</a><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span>
   </div>
   <h1>局部线性森林导论</h1>
   <p class="sub">原文：<a href="https://grf-labs.github.io/grf/articles/llf.html" target="_blank" rel="noopener">Introduction to local linear forests</a>（英文）&nbsp;·&nbsp;grf 官方文档中文译本</p>
@@ -154,7 +185,7 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)</pre></div>
 <p>本文旨在演示如何使用局部线性森林（local linear forests, LLF）。我们先从标准用法讲起，逐步梳理参数选择与方法细节，最后再讨论如何在更大数据集上使用局部线性校正。</p>
 <div id="local-linear-forests-the-basics" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-局部线性森林-基本原理">
 <a href="#local-linear-forests-the-basics" class="anchor"></a>局部线性森林：基本原理</h2>
 <p>随机森林是一种广受欢迎且强大的非参数回归方法，但当数据中存在强烈而平滑的效应时，它的表现会变差。局部线性回归很适合在低维空间中拟合相对平滑的函数，却会因维数灾难而迅速退化：它依赖欧氏距离，而欧氏距离即便在 4 维或 5 维时也很快失去"局部性"。本算法融合了两种方法的优点（随机森林的数据自适应能力，以及局部线性回归的平滑拟合），从而给出更优的预测与置信区间。关于局部线性森林（LLF）的完整理论，可参见我们在 ArXiv 上的论文。</p>
 <p>考虑一棵由 <span class="math inline">\(B\)</span> 棵树组成的随机森林，要对测试点 <span class="math inline">\(x_0\)</span> 做预测。在第 <span class="math inline">\(b\)</span> 棵树中，测试点会落入某个叶节点 <span class="math inline">\(L_b(x_0)\)</span>。回归森林的做法是：先在 <span class="math inline">\(L_b(x_0)\)</span> 中对所有响应取平均，再跨所有树把这些预测 <span class="math inline">\(\hat{\mu}_b(x_0)\)</span> 平均起来。为了换个角度理解随机森林，我们可以交换求和顺序，由此把随机森林视为一种高维空间中的核（kernel）或加权方法。</p>
@@ -185,7 +216,7 @@ L_b(x_0)\}}{|L_b(x_0)|}
 </div>
 
 <div id="toy-example" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-小试牛刀">
 <a href="#toy-example" class="anchor"></a>小试牛刀</h2>
 <p>我们先看一个简单的例子，说明局部线性森林在什么情况下能胜过普通随机森林。</p>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="no">p</span> <span class="kw">&lt;-</span> <span class="fl">20</span>
@@ -230,7 +261,7 @@ L_b(x_0)\}}{|L_b(x_0)|}
 </div>
 
 <div id="parameters-for-llf-prediction" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-局部线性森林预测的参数">
 <a href="#parameters-for-llf-prediction" class="anchor"></a>局部线性森林预测的参数</h2>
 <p>还有几个改动需要说明。我们先列出局部线性森林特有的训练参数（用户也可以参考 regression_forest 的全部调参项，它们在这里同样适用）。</p>
 <table class="table">
@@ -320,7 +351,7 @@ L_b(x_0)\}}{|L_b(x_0)|}
 </div>
 
 <div id="training-the-algorithm" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-训练算法">
 <a href="#training-the-algorithm" class="anchor"></a>训练算法</h2>
 <div class="sourceCode" id="cb4"><pre class="r"><span class="no">n</span> <span class="kw">&lt;-</span> <span class="fl">600</span>
 <span class="no">p</span> <span class="kw">&lt;-</span> <span class="fl">20</span>
@@ -356,7 +387,7 @@ L_b(x_0)\}}{|L_b(x_0)|}
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>((<span class="no">preds.llf</span> - <span class="no">truth</span>)**<span class="fl">2</span>)
 <span class="co">#&gt; [1] 5.78837</span></pre></div>
 <div id="weight-penalties" class="section level3">
-<h3 class="hasAnchor">
+<h3 class="hasAnchor" id="sec-权重惩罚">
 <a href="#weight-penalties" class="anchor"></a>权重惩罚</h3>
 <p>在做局部线性森林预测时，我们可以采用标准岭回归（ll.weight.penalty 设为 FALSE），也可以按协方差矩阵做缩放（ll.weight.penalty 设为 TRUE）：<span class="math inline">\(\hat{\beta}_\text{TRUE} = (X'AX (1 +
 \lambda))^{-1} X'AY\)</span>。该参数默认值为 FALSE。</p>
@@ -373,7 +404,7 @@ L_b(x_0)\}}{|L_b(x_0)|}
 <span class="co">#&gt; [1] 5.736676</span></pre></div>
 </div>
 <div id="residual-splits" class="section level3">
-<h3 class="hasAnchor">
+<h3 class="hasAnchor" id="sec-残差切分">
 <a href="#residual-splits" class="anchor"></a>残差切分</h3>
 <p>我们还要考虑局部线性森林中"建树"的作用。标准的 CART 切分会最小化"用叶节点整体均值做预测"带来的误差；而我们也可以改用残差切分（residual splits），即最小化岭回归残差上对应的预测误差。可以想见，当某些协变量带有强烈的线性信号时，这种做法会很有帮助——我们不必浪费森林的切分去建模这些线性部分，因为最后一步回归仍能把它们找出来。本质上，这让我们在知道"后面还有一次局部回归要做"的前提下，把森林的切分用得最有效率。该特性目前仍属于实验性功能。</p>
 <div class="sourceCode" id="cb7"><pre class="r"><span class="no">forest</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://grf-labs.github.io/grf/articles/reference/ll_regression_forest.html">ll_regression_forest</a></span>(<span class="no">X</span>, <span class="no">Y</span>)
@@ -445,10 +476,10 @@ L_b(x_0)\}}{|L_b(x_0)|}
 </div>
 </div>
 <div id="llf-prediction" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-局部线性森林预测">
 <a href="#llf-prediction" class="anchor"></a>局部线性森林预测</h2>
 <div id="ridge-parameter-selection" class="section level3">
-<h3 class="hasAnchor">
+<h3 class="hasAnchor" id="sec-岭参数选择">
 <a href="#ridge-parameter-selection" class="anchor"></a>岭参数选择</h3>
 <p>用户可以选择自行指定岭回归参数 ll.lambda。如果用户不设置该值，森林会通过自动调参来选定它。一般来说，我们建议让森林自动调这个参数，或者由你自己跑一轮交叉验证。唯一的例外是数据集非常大的情形。</p>
 <div class="sourceCode" id="cb10"><pre class="r"><span class="no">results.llf.lambda</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">forest</span>, <span class="no">X.test</span>,
@@ -463,7 +494,7 @@ L_b(x_0)\}}{|L_b(x_0)|}
 <span class="co">#&gt; [1] 5.771045</span></pre></div>
 </div>
 <div id="linear-correction-variable-selection" class="section level3">
-<h3 class="hasAnchor">
+<h3 class="hasAnchor" id="sec-线性校正变量的选择">
 <a href="#linear-correction-variable-selection" class="anchor"></a>线性校正变量的选择</h3>
 <p>当协变量很多时，把局部回归限制为只包含少数感兴趣的变量是合理的。我们推荐使用 lasso 方法。</p>
 <div class="sourceCode" id="cb11"><pre class="r"><span class="co"># 训练森林</span>
@@ -491,7 +522,7 @@ L_b(x_0)\}}{|L_b(x_0)|}
 </div>
 </div>
 <div id="pointwise-confidence-intervals" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-逐点置信区间">
 <a href="#pointwise-confidence-intervals" class="anchor"></a>逐点置信区间</h2>
 <p>最后，我们来看方差估计与置信区间，其原理与 grf 的方差估计类似。为了便于可视化，我们沿用本文第一个数据生成过程。</p>
 <div class="sourceCode" id="cb12"><pre class="r"><span class="no">mu</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">x</span>){ <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(<span class="fl">1</span> + <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(<span class="fl">6</span> * <span class="no">x</span>)) }
@@ -540,7 +571,7 @@ L_b(x_0)\}}{|L_b(x_0)|}
 </div>
 
 <div id="a-note-on-larger-datasets" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-关于更大数据集的说明">
 <a href="#a-note-on-larger-datasets" class="anchor"></a>关于更大数据集的说明</h2>
 <p>尽管局部线性森林通常优于普通随机森林，但当维数非常高时，训练和预测都会很耗时。原因在于：假设有 n_train 个训练点和 n_test 个测试点，我们相当于要跑 n_test 次回归，每次都用全部 n_train 个数据点。不过，有时我们仍想用随机森林并对线性趋势做校正。在这种情形下（数据量约在 10 万条及以上，当然具体还要看实际场景），选取少量线性校正变量就格外重要。目前的岭参数调参也会耗时到难以接受，因此我们建议：要么统一把该值设为 0.01，要么在数据的子集上调参，要么限制候选取值的范围，要么用小批量的浅树做交叉验证。</p>
 <table class="table">
@@ -690,5 +721,6 @@ L_b(x_0)\}}{|L_b(x_0)|}
     <p>本页为 <a href="https://grf-labs.github.io/grf/articles/llf.html" target="_blank" rel="noopener">grf 官方文档</a> 的中文译本，原文版权归 grf 作者所有，依据项目许可（MIT）翻译并注明出处，仅供学习交流。代码与公式保持原样，译文新增的「背景与解释」框为译者补充。</p>
   </div>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
