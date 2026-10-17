@@ -133,6 +133,35 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -142,7 +171,9 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 
 <div class="wrap">
   <div class="topbar">
-    <a class="back" href="index.html">&larr; grf 教程总览</a>
+    <a class="back" href="index.html">&larr; grf 教程总览</a><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span>
   </div>
   <h1>《Qini 曲线：自动成本-收益分析》</h1>
   <p class="sub">原文：<a href="https://grf-labs.github.io/grf/articles/maq.html" target="_blank" rel="noopener">Qini curves: Automatic cost-benefit analysis</a>（英文）&nbsp;·&nbsp;grf 官方文档中文译本</p>
@@ -153,7 +184,7 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">maq</span>)</pre></div>
 <p>本篇短文简要介绍 Qini 曲线（或称成本-收益曲线，cost curves）如何作为一种直观而有吸引力的指标，用于在"实施治疗存在成本"时对治疗规则（treatment rules）进行评估；并介绍如何将其推广到多个治疗臂（treatment arms），这些功能在配套包 <a href="https://github.com/grf-labs/maq">maq</a> 中实现。完整的理论细节，请参考 <a href="https://arxiv.org/abs/2306.11979">这篇论文</a>。</p>
 <div id="using-estimated-cates-to-derive-treatment-allocation-policies" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-用估计的-cate-推导治疗分配策略">
 <a href="#using-estimated-cates-to-derive-treatment-allocation-policies" class="anchor"></a>用估计的 CATE 推导治疗分配策略</h2>
 <p>在正式介绍 Qini 曲线之前，我们先约定一些术语、复习几个核心概念。考虑一个二值处理分配 <span class="math inline">\(W_i = \{0, 1\}\)</span> 以及我们关心的某个结局 <span class="math inline">\(Y_i\)</span>。为了判断人群中是否存在某些亚组（subgroup）——由某些可观测特征 <span class="math inline">\(X_i\)</span> 定义——对处理分配的反应各不相同，我们的核心关注对象是条件平均处理效应（conditional average treatment effect，简称 CATE）</p>
 <p><span class="math display">\[\tau(X_i) = E[Y_i(1) - Y_i(0) \,|\, X_i
@@ -174,7 +205,7 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 <p>对医学研究者而言，这意味着我们不再问"谁病得最重"，而是问"谁最可能因治疗而获益"。举个例子：某种降压药对年轻人效果平平，但对伴有特定基因型的高血压患者效果显著。平均效应（ATE）会把这两种情况混在一起，掩盖真正该被治疗的亚组。Uplift 建模正是异质性处理效应（HTE）分析的核心思路，也是下文所有靶向治疗策略的基础。</p>
 </div>
 <div id="qini-curves-evaluating-policies-over-many-decision-thresholds" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-qini-曲线-在多个决策阈值上评估策略">
 <a href="#qini-curves-evaluating-policies-over-many-decision-thresholds" class="anchor"></a>Qini 曲线：在多个决策阈值上评估策略</h2>
 <p>为了更具一般性，现在考虑"实施治疗会产生成本"的情形，记 <span class="math inline">\(C_i(1)\)</span> 为把第 <span class="math inline">\(i\)</span> 个个体分配到治疗臂的成本（并假设不实施治疗没有成本，即 <span class="math inline">\(C_i(0)=0\)</span>）。成本随个体变化的例子可以是疫苗接种：把药品送到远离医疗中心的居民那里，成本往往高于送到附近的居民。成本未必是金钱，它也可以刻画更抽象的东西，例如负外部性（negative externalities）。</p>
 <p>现在的问题是：给定预算 <span class="math inline">\(B\)</span>，用什么合适的方法来量化"依据估计 CATE 来分配治疗"背后的成本-收益权衡（cost-benefit tradeoff）？事实证明，把成本纳入我们在上一节勾勒的策略评估框架中，是一件很自然的事。</p>
@@ -237,7 +268,7 @@ Q(B) = E[\pi_B(X_i) (Y_i(1) - Y_i(0))] = E[\pi_B(X_i) \tau(X_i)],
 <span class="co">#&gt;    0.075    0.019</span></pre></div>
 <p><strong>关于策略评估的说明：</strong>只要 IPW 能解决的问题，通常都存在一个双稳健（doubly robust）方法（这里是增强型 IPW，即 Augmented-IPW）能在统计功效上做得更好。本篇为简洁起见仍采用 IPW 评估，但请注意：在 GRF 中，你可以额外训练一个测试集森林，并通过函数 <code><a href="https://grf-labs.github.io/grf/articles/reference/get_scores.html">get_scores(forest)</a></code> 取得双稳健的测试集得分，用它来代替 <code>IPW.scores</code>，从而得到 Qini 曲线的双稳健估计。</p>
 <div id="aside-the-qini-curve-vs-the-toc-curve" class="section level3">
-<h3 class="hasAnchor">
+<h3 class="hasAnchor" id="sec-题外话-qini-曲线与-toc-曲线的区别">
 <a href="#aside-the-qini-curve-vs-the-toc-curve" class="anchor"></a>题外话：Qini 曲线与 TOC 曲线的区别</h3>
 <p>到目前为止，我们已经介绍了两条曲线，它们看起来都在服务于相似的目的。区别何在？这取决于具体应用场景。仔细看就会发现，哪条曲线有用，取决于我们想要回答的问题。下图并列展示了 TOC 与 Qini 曲线在如下情形下的样子：ATE 为正，但人群中存在治疗效应既为正也为负的亚组（Qini 图中虚线代表 ATE）。</p>
 <p><img src="https://grf-labs.github.io/grf/articles/maq_files/figure-html/unnamed-chunk-5-1.png" alt="" width="700"></p>
@@ -248,7 +279,7 @@ Q(B) = E[\pi_B(X_i) (Y_i(1) - Y_i(0))] = E[\pi_B(X_i) \tau(X_i)],
 </div>
 </div>
 <div id="qini-curves-with-multi-armed-treatment" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-多臂治疗情形下的-qini-曲线">
 <a href="#qini-curves-with-multi-armed-treatment" class="anchor"></a>多臂治疗情形下的 Qini 曲线</h2>
 <p>现在考虑我们有 <span class="math inline">\(k = 0,\ldots K\)</span> 个可用治疗臂的情形，其中 <span class="math inline">\(k=0\)</span> 是零成本的对照组臂。例如，<span class="math inline">\(k=1\)</span> 可以是低成本的药，<span class="math inline">\(k=2\)</span> 可以是成本更高但效果更好的药（<span class="math inline">\(k=0\)</span> 可以是安慰剂对照）。</p>
 <p>给定估计的处理效应 <span class="math inline">\(\hat \tau(\cdot)\)</span> 与成本 <span class="math inline">\(C(\cdot)\)</span>（注意，这些对象现在是向量值（vector-valued）的，即 <span class="math inline">\(\hat \tau(X_i)\)</span> 的第 <span class="math inline">\(k\)</span> 个元素，是针对协变量为 <span class="math inline">\(X_i\)</span> 的个体、第 <span class="math inline">\(k\)</span> 个治疗臂的 CATE 估计<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>）——我们接下来要问：如何像上面那样，在改变可用预算的同时，依据估计的 CATE（与成本）来最优地分配治疗？</p>
@@ -327,7 +358,7 @@ Q(B) = E[\pi_B(X_i) (Y_i(1) - Y_i(0))] = E[\pi_B(X_i) \tau(X_i)],
 <p>对临床研究者而言，这意味着 RCT 之后还能走得更远：不再只报一个"整体有效"，而是量化"如何把有限的药物资源精准投到最获益的亚组"，并给出置信区间支撑卫生决策。这也是从"证据是否存在"走向"证据如何落地"的关键一步。</p>
 </div>
 <div id="references" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-参考文献">
 <a href="#references" class="anchor"></a>参考文献</h2>
 <p>Sverdrup, Erik, Han Wu, Susan Athey, and Stefan Wager. Qini Curves for Multi-Armed Treatment Rules. <em>Journal of Computational and Graphical Statistics</em>, 2025.（<a href="https://arxiv.org/abs/2306.11979">arxiv</a>）</p>
 <p>Yadlowsky, Steve, Scott Fleming, Nigam Shah, Emma Brunskill, and Stefan Wager. Evaluating Treatment Prioritization Rules via Rank-Weighted Average Treatment Effects. <em>Journal of the American Statistical Association</em>, 120(549), 2025.（<a href="https://arxiv.org/abs/2111.07966">arxiv</a>）</p>
@@ -347,5 +378,6 @@ Q(B) = E[\pi_B(X_i) (Y_i(1) - Y_i(0))] = E[\pi_B(X_i) \tau(X_i)],
     <p>本页为 <a href="https://grf-labs.github.io/grf/articles/maq.html" target="_blank" rel="noopener">grf 官方文档</a> 的中文译本，原文版权归 grf 作者所有，依据项目许可（MIT）翻译并注明出处，仅供学习交流。代码与公式保持原样，译文新增的「背景与解释」框为译者补充。</p>
   </div>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
