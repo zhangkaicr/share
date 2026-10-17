@@ -133,6 +133,35 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -142,7 +171,9 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 
 <div class="wrap">
   <div class="topbar">
-    <a class="back" href="index.html">&larr; grf 教程总览</a>
+    <a class="back" href="index.html">&larr; grf 教程总览</a><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span>
   </div>
   <h1>把平均处理效应迁移到新目标人群</h1>
   <p class="sub">原文：<a href="https://grf-labs.github.io/grf/articles/ate_transport.html" target="_blank" rel="noopener">Estimating ATEs on a new target population</a>（英文）&nbsp;·&nbsp;grf 官方文档中文译本</p>
@@ -150,7 +181,7 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
   <div class="content">
 <p class="lead">本篇简要介绍如何使用广义随机森林（GRF）来估计某个新目标人群上的平均处理效应（average treatment effect，ATE）。这里的目标人群由一组协变量 <span class="math inline">\(X_{test}\)</span> 来定义。第一部分给出问题设定和一个双稳健（doubly robust）估计量的概览，第二部分给出一个用 GRF 实现该估计量的完整代码示例。</p>
 <div id="transport-overview" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-迁移问题概览">
 <a href="#transport-overview" class="anchor"></a>迁移问题概览</h2>
 <p>给定一个已有试验得到的估计值，要在某个新的目标人群上做统计推断，这个一般性问题被称为"迁移问题"（transport problem），相关文献非常多。本篇采用 Dahabreh 等人（2020）提出的设定与双稳健估计量。</p>
 <div class="note"><span class="nt">背景与解释</span>
@@ -158,7 +189,7 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 <p>把试验结果<strong>迁移（transport）</strong>到目标人群，正是为了解决上述问题。医学语境下，它和"真实世界证据（RWE）""目标试验模拟（target trial emulation）"一脉相承：我们手里有试验数据（知道处理、结局、协变量），还有一批目标人群的代表性抽样（只知道协变量），想知道后者若接受处理会怎样。注意"迁移（transport）"与"可推广性（generalizability）"在文献里常混用，但严格说前者强调把<em>已估计的效应</em>搬到新人群，后者更泛指把<em>任何结论</em>外推；本篇二者含义一致。</p>
 </div>
 <div id="setup" class="section level3">
-<h3 class="hasAnchor">
+<h3 class="hasAnchor" id="sec-问题设定">
 <a href="#setup" class="anchor"></a>问题设定</h3>
 <p>我们把总体记为第 <span class="math inline">\(i = 1
 ... n\)</span> 个个体。其中有一个子集 <span class="math inline">\(RCT\)</span> 来自一次随机化（或观察性）试验/研究，对这部分我们拿得到完整数据：共有 <span class="math inline">\(n_{RCT}\)</span> 条观测，包括基线协变量 <span class="math inline">\(X_i\)</span>、二值处理指示 <span class="math inline">\(W_i=\{0, 1\}\)</span> 以及结局 <span class="math inline">\(Y_i\)</span>。此外我们还掌握剩下的子集 <span class="math inline">\(obs\)</span>，对这部分只观察到了 <span class="math inline">\(n_{obs}\)</span> 条基线协变量 <span class="math inline">\(X_i\)</span>（且 <span class="math inline">\(n_{RCT} + n_{obs}=n\)</span>）。我们将前一部分称为"参加了试验"，记为 <span class="math inline">\(S_i = 1\)</span>；后一部分"没参加"，记为 <span class="math inline">\(S_i = 0\)</span>。我们关心的是未参加者（即"目标"人群）中的平均处理效应，也就是：</p>
@@ -242,7 +273,7 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 </div>
 </div>
 <div id="assumptions" class="section level3">
-<h3 class="hasAnchor">
+<h3 class="hasAnchor" id="sec-识别假设">
 <a href="#assumptions" class="anchor"></a>识别假设</h3>
 <p>在已经估计出 <span class="math inline">\(E[Y(1) - Y(0)
 | S = 1]\)</span> 的前提下，要再去估计 <span class="math inline">\(E[Y(1) - Y(0) | S =
@@ -261,7 +292,7 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 </div>
 </div>
 <div id="estimator" class="section level3">
-<h3 class="hasAnchor">
+<h3 class="hasAnchor" id="sec-估计量">
 <a href="#estimator" class="anchor"></a>估计量</h3>
 <p>先交代几个记号。 <span class="math inline">\(\hat
 \tau^{(-i)}(X_i)\)</span> 是条件平均处理效应 <span class="math inline">\(E[Y_i(1) - Y_i(0) | X_i =
@@ -291,7 +322,7 @@ e^{(-i)}(X_i))}\right)
 </div>
 </div>
 <div id="algorithm" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-实现算法">
 <a href="#algorithm" class="anchor"></a>实现算法</h2>
 <p>下面这个函数实现了上述估计量，它接受一个用二值处理训练好的普通因果森林（或因果生存森林）作为输入。</p>
 <p><strong><em>输入</em></strong>：</p>
@@ -332,7 +363,7 @@ e^{(-i)}(X_i))}\right)
 <p>注意，估计量里包含对迁移概率 <span class="math inline">\(\hat p^{(-i)}(X_i)\)</span> 的除法，如果它太小就会出问题。一般建议把这些估计值画成直方图，借此判断是否存在正定性（positivity）问题。</p>
 </div>
 <div id="an-example" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-一个示例">
 <a href="#an-example" class="anchor"></a>一个示例</h2>
 <p>本节我们模拟一个简单的例子：处理效应修饰因子（<span class="math inline">\(X_1\)</span>）在随机试验和目标人群中的分布不同（也就是说，试验的纳入概率依赖于某个效应修饰因子）。把模拟出的潜在结局画出来，两群人的分布大致如下：</p>
 <p><img src="https://grf-labs.github.io/grf/articles/ate_transport_files/figure-html/unnamed-chunk-3-1.png" alt="模拟的潜在结局分布：蓝色为目标人群，红色为随机试验人群" width="700"></p>
@@ -365,7 +396,7 @@ e^{(-i)}(X_i))}\right)
 <span class="co">#&gt; [1] "True mean: 0.78"</span></pre></div>
 </div>
 <div id="references" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-参考文献">
 <a href="#references" class="anchor"></a>参考文献</h2>
 <p>Dahabreh, Issa J., Sarah E. Robertson, Jon A. Steingrimsson,
 Elizabeth A. Stuart, and Miguel A. Hernan. 将随机试验的结论推广到一个新的目标人群（Extending inferences from a
@@ -374,7 +405,7 @@ randomized trial to a new target population）. Statistics in Medicine
 <a href="https://arxiv.org/abs/1805.00550">arxiv</a>)</p>
 </div>
 <div id="appendix-estimating-ey-x-test" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-附录-估计-e-y-x-test">
 <a href="#appendix-estimating-ey-x-test" class="anchor"></a>附录：估计 E[Y | X.test]</h2>
 <p>如果我们只想要条件均值 <span class="math inline">\(E[Y | X_{test}]\)</span> 的估计值，它也可以看作上面这套迁移流程的一个特例。不过还有一个更简单的做法：只用一个带"哑处理（dummy treatment）"指示的普通因果森林就能实现。记原始训练数据为 <span class="math inline">\((X_{train}, Y_{train})\)</span>，新测试数据为 <span class="math inline">\(X_{test}\)</span>。按如下方式用哑处理与哑响应变量 <span class="math inline">\((X, Y, W)\)</span> 把数据拼接起来：<span class="math inline">\((X_{train}, Y_{train}, 1)\)</span> 与 <span class="math inline">\(X_{test}, 0, 0)\)</span>。然后，在这个拼接数据上拟合因果森林，其"对照组上的平均处理效应"（ATC，average treatment effect on controls）就会给出 <span class="math inline">\(E[Y
 | X_{test}]\)</span> 的估计：因为我们"定义"了潜在结局 <span class="math inline">\(Y(1) = Y\)</span> 且 <span class="math inline">\(Y(0) = 0\)</span>，于是有 <span class="math inline">\(E[Y(1) - Y(0) | X_{test}] = E[Y |
@@ -412,5 +443,6 @@ X_{test}]\)</span>。</p>
     <p>本页为 <a href="https://grf-labs.github.io/grf/articles/ate_transport.html" target="_blank" rel="noopener">grf 官方文档</a> 的中文译本，原文版权归 grf 作者所有，依据项目许可（MIT）翻译并注明出处，仅供学习交流。代码与公式保持原样，译文新增的「背景与解释」框为译者补充。</p>
   </div>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
