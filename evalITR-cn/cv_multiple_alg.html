@@ -128,6 +128,35 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -137,7 +166,9 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 
 <div class="wrap">
   <div class="topbar">
-    <a class="back" href="index.html">&larr; evalITR 教程总览</a>
+    <a class="back" href="index.html">&larr; evalITR 教程总览</a><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span>
   </div>
   <h1>用多种机器学习算法做交叉验证</h1>
   <p class="sub">原文：<a href="https://michaellli.github.io/evalITR/articles/cv_multiple_alg.html" target="_blank" rel="noopener">Cross-validation with multiple ML algorithms</a>（英文）&nbsp;·&nbsp;evalITR 官方文档中文译本</p>
@@ -151,7 +182,7 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 <p><strong>为什么要比较多种机器学习算法？</strong> 在估计 ITR 时，并不存在“一种算法永远最好”的情况。不同算法对数据中非线性关系、交互项、高维协变量的捕捉能力各不相同：因果森林（causal forest）擅长捕捉异质性处理效应；bartCause（贝叶斯加性回归树）对连续型结局灵活且稳健；lasso 在协变量很多、但真正起作用的特征较少时更“省心”；随机森林（rf）则对复杂的非线性关系更鲁棒。evalITR 同时跑多个算法，目的并不是证明谁“更正确”，而是比较它们估计出的处方效应与 AUPEC 高低——这能帮你判断在当前数据下，哪一类模型更适合做个体化决策。</p>
 </div>
 
-<h2>用多种算法估计并交叉验证 ITR</h2>
+<h2 id="sec-用多种算法估计并交叉验证-itr">用多种算法估计并交叉验证 ITR</h2>
 <p>下面这段代码先通过 caret 的 <code>trainControl</code> 设定“重复 K 折交叉验证”（repeatedcv），再调用 <code>estimate_itr</code> 一次性用 causal_forest、bartc、lasso、rf 四种算法估计 ITR，并用 <code>evaluate_itr</code> 与 <code>summary</code> 给出无偏的评估结果。</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/MichaelLLi/evalITR" class="external-link">evalITR</a></span><span class="op">)</span></span>
@@ -263,14 +294,14 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 <p><strong>模型选择对 ITR 质量的影响</strong>。ITR 的“质量”由两个环节共同决定：一是估计阶段（<code>estimate_itr</code>）学出的决策规则是否准确，二是评估阶段（<code>evaluate_itr</code>）在样本外是否真的带来获益。如果选错算法，可能出现“训练集表现好、样本外却很差”的过拟合，也可能因为模型过于简单而漏掉重要的异质性。因此，比较多种算法、并看它们在交叉验证下的无偏指标（PAPE、AUPEC 等），是确保 ITR 可靠的关键一步——模型选择本身就是结论的一部分，而不是一个前置的技术细节。</p>
 </div>
 
-<h2>读懂汇总结果，选出最佳算法</h2>
+<h2 id="sec-读懂汇总结果-选出最佳算法">读懂汇总结果，选出最佳算法</h2>
 <p>上面的 <code>summary</code> 输出依次给出了五张表：PAPE、PAPEp、PAPDp、AUPEC 以及按组拆分的 GATE。各列含义为：<code>estimate</code> 为效应估计值，<code>std.deviation</code> 为标准差，<code>algorithm</code> 为所用算法，<code>statistic</code> 为检验统计量，<code>p.value</code> 为显著性 p 值；GATE 表中另有 <code>group</code>（分组编号）、<code>upper</code>/<code>lower</code>（置信区间上下限）。下面这个框说明如何据此挑出“最佳算法”。</p>
 
 <div class="note"><span class="nt">背景与解释</span>
 <p><strong>如何选出“最佳算法”？</strong> 判断“最佳”时优先看：① <strong>PAPE</strong>——采用该 ITR 相对于不采用的总体平均处方效应，越大越好（且 p 值越小越显著）；② <strong>PAPEp</strong>——在预算约束下（本例 <code>budget = 0.2</code>，即最多给 20% 的人处理）的处方效应，更贴近资源有限的真实临床场景；③ <strong>PAPDp</strong>——两个算法两两配对比较的处方效应差异，p 值显著说明两者真的存在差距（例如 <code>causal_forest × lasso</code> 的 p = 0.0017，非常显著；而 <code>bartc × rf</code> 的 p = 0.9873，几乎无差异）；④ <strong>AUPEC</strong>——处方效应曲线下面积，衡量在不同覆盖比例下累计获益的大小。通常先筛掉 p 值不显著（说明与不采用 ITR 没差别）的算法，再在显著者中挑选 PAPE / PAPEp / AUPEC 最大者。</p>
 </div>
 
-<h2>绘制不同算法的 AUPEC 曲线</h2>
+<h2 id="sec-绘制不同算法的-aupec-曲线">绘制不同算法的 AUPEC 曲线</h2>
 <p>下面我们把不同机器学习算法在写作得分（writing score）上的估计「处方效应曲线下面积（Area Under the Prescriptive Effect Curve, AUPEC）」画出来。</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 绘制不同 ML 算法的 AUPEC 图</span></span>
@@ -287,5 +318,6 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
     <p>本页为 <a href="https://michaellli.github.io/evalITR/articles/cv_multiple_alg.html" target="_blank" rel="noopener">evalITR 包官方文档</a> 的中文译本，原文版权归原作者（Michael Li 等）所有，依据开源许可翻译并注明出处，仅供学习交流。R 代码保持原样，译文新增的「背景与解释」框为译者补充。evalITR 源代码：<a href="https://github.com/MichaelLLi/evalITR" target="_blank" rel="noopener">github.com/MichaelLLi/evalITR</a>。</p>
   </div>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
