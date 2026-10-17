@@ -107,6 +107,35 @@ footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);font-si
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -158,8 +187,9 @@ footer{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);font-si
     <li><a href="#s4">结论</a></li>
     <li><a href="#s5">致谢</a></li>
     <li><a href="#refs">参考文献</a></li>
-  </ol>
-</nav>
+  </ol><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span></nav>
 
 <h2 id="s1">1 引言</h2>
 <p>从工业领域（Billinton 等，1996）到生物学（Bar-Joseph 等，2003）、金融学（Taylor，2007）乃至社会科学（Gottman，1981），几乎所有领域都在测量各式各样的时间序列数据。虽然记录下来的数据本身千差万别，但有一个共同的问题是缺失值。许多分析方法都要求事先把缺失值替换成合理的取值。在统计学中，这个替换缺失值的过程被称为<b>填补</b>（imputation）。</p>
@@ -390,9 +420,9 @@ tsAirgap</code></pre>
 
 <h2 id="s5">5 致谢</h2>
 <p>本工作的部分内容是在「IMProvT：用于饮用水供给与配送过程优化的智能测量方法」项目（项目编号 03ET1387A）中完成的，由德意志联邦共和国联邦经济事务与能源部提供支持，谨致谢忱。</p>
-<h3>5.1 使用到的 CRAN 包</h3>
+<h3 id="sec-5-1-使用到的-cran-包">5.1 使用到的 CRAN 包</h3>
 <p>AMELIA、mice、VIM、missMDA、imputeTS、zoo、forecast、spacetime、timeSeries、xts</p>
-<h3>5.2 所引文献涉及的相关 CRAN 任务视图</h3>
+<h3 id="sec-5-2-所引文献涉及的相关-cran-任务视图">5.2 所引文献涉及的相关 CRAN 任务视图</h3>
 <p>ClinicalTrials、Econometrics、Environmetrics、Finance、MissingData、MixedModels、OfficialStatistics、Psychometrics、Spatial、SpatioTemporal、TimeSeries</p>
 <p style="font-size:14px;color:var(--muted)">1. <a href="http://www.spotseven.de/gecco-challenge/gecco-challenge-2014/">http://www.spotseven.de/gecco-challenge/gecco-challenge-2014/</a><br>2. <a href="http://www.spotseven.de/gecco-challenge/gecco-challenge-2015/">http://www.spotseven.de/gecco-challenge/gecco-challenge-2015/</a></p>
 
@@ -424,7 +454,7 @@ tsAirgap</code></pre>
   </ol>
 </details>
 
-<h2>引用格式</h2>
+<h2 id="sec-引用格式">引用格式</h2>
 <p>依据原文要求，引用本工作请使用：</p>
 <pre><code>Moritz &amp; Bartz-Beielstein, "The R Journal: imputeTS: Time Series Missing Value Imputation in R",
 The R Journal, 2017</code></pre>
@@ -448,5 +478,6 @@ The R Journal, 2017</code></pre>
 </footer>
 
 </div>
+<script src="search.js"></script>
 </body>
 </html>
