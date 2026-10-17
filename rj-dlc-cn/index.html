@@ -87,6 +87,35 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 @media(max-width:640px){.tt{top:10px;right:10px;width:36px;height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -124,7 +153,9 @@ h1{font-size:30px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 <div class="note">
   <span class="nt">背景与解释</span>
   <p><strong>SATE、PATT、CATE、ATE 到底差在哪？</strong>这四个估计量的目标人群与"平均"的范围不同。ATE（average treatment effect，平均处理效应）是<em>目标人群全部个体</em>在接受处理与不接受处理时潜在结果之差的期望，回答"若所有人都接受该干预会怎样"。ATT/SATE（sample average treatment effect on the treated）只针对<em>实际接受了处理的那部分个体</em>，且限定在当前样本内；PATT（population ATT）则把这一效应外推到<em>目标人群</em>中所有"会接受处理"的个体。CATE（conditional ATE）是在协变量 <span class="math inline">\(\mathbf{X}=\mathbf{x}\)</span> 所定义的<em>亚组</em>上取平均，刻画效应随个体特征的变化，即效应异质性。</p>
-  <p>临床读法：ATE 回答"对所有符合指征的患者都用药，平均能获益多少"；PATT 回答"对现实中真的会用药的那群患者，效果如何"，这对卫生政策与真实世界外推更关键；CATE 回答"哪一类患者受益最大、哪一类可能受害"，是精准医学的核心。本文的 DeepLearningCausal 主要服务后两类问题。</p>
+  <p>临床读法：ATE 回答"对所有符合指征的患者都用药，平均能获益多少"；PATT 回答"对现实中真的会用药的那群患者，效果如何"，这对卫生政策与真实世界外推更关键；CATE 回答"哪一类患者受益最大、哪一类可能受害"，是精准医学的核心。本文的 DeepLearningCausal 主要服务后两类问题。</p><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span>
 </div>
 
 <div class="note">
@@ -906,5 +937,6 @@ Y. Zhao and Q. Liu. CausalML: <span>Python</span> package for causal inference m
     <p>本页为个人学习用途的非官方中文译本，未经原文作者审阅；学术引用请以英文原文为准。译者在部分方法学之处补充了面向医学研究者的「背景与解释」说明框，相关内容不属于原文。</p>
   </div>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
