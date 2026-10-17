@@ -133,6 +133,35 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -142,7 +171,9 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 
 <div class="wrap">
   <div class="topbar">
-    <a class="back" href="index.html">&larr; grf 教程总览</a>
+    <a class="back" href="index.html">&larr; grf 教程总览</a><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span>
   </div>
   <h1>《grf 方法导论：广义随机森林》</h1>
   <p class="sub">原文：<a href="https://grf-labs.github.io/grf/articles/grf_guide.html" target="_blank" rel="noopener">An introduction to grf</a>（英文）&nbsp;·&nbsp;grf 官方文档中文译本</p>
@@ -160,11 +191,11 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 <li><p><a href="#example-the-effect-of-poverty-on-attention"><em>实例：贫困对注意力的影响</em></a></p></li>
 </ol>
 <!-- -------------------GRF OVERVIEW------------------- --><div id="a-grf-guided-tour" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-grf-导览">
 <a href="#a-grf-guided-tour" class="anchor"></a>grf 导览</h2>
 <p>我们将说明：在估计平均处理效应时，现代机器学习如何灵活地控制混杂；Breiman（2001）的随机森林如何被改造以针对处理效应的异质性；以及这种方法如何推广到一大类场景，包括工具变量（instrumental variable）和右删截结局（right-censored outcome）。更多内容可参考 Athey 与 Wager（2019）、Cui 等人（2023）、Dandl 等人（2024）、Friedberg 等人（2020）以及 Sverdrup 等人（2024）。关于更系统的理论论述，Wager（2024）提供了教科书式的讨论。</p>
 <div id="machine-learning-for-causal-inference" class="section level3">
-<h3 class="hasAnchor">
+<h3 class="hasAnchor" id="sec-用机器学习做因果推断">
 <a href="#machine-learning-for-causal-inference" class="anchor"></a>用机器学习做因果推断</h3>
 <p>机器学习方法天生是为预测而设计的。但在因果应用中，我们的目标往往是推断（inference）而非预测（prediction）。尽管统计估计与统计预测是不同的任务（Efron，2020），但预测工具用得合适时，也能支撑有效的推断。本节将概述：现代机器学习如何结合半参数统计（semi-parametric statistics）的思想，为因果推断提供灵活、且与具体模型形式无关（model-agnostic）的工具。</p>
 <p>假设我们观测到结局 <span class="math inline">\(Y_i\)</span>、二元处理指示变量 <span class="math inline">\(W_i \in
@@ -205,7 +236,7 @@ e^{(-i)}(X_i), \text{weights} = 1\{X_i \in \mathcal{N}(x) \}\Biggr),
 <p>关键在于如何构造这些权重。下一节将回顾 Breiman 的随机森林，并解释它如何充当"自适应邻域寻找器"（adaptive neighborhood finder）。</p>
 </div>
 <div id="random-forest-as-an-adaptive-neighborhood-finder" class="section level3">
-<h3 class="hasAnchor">
+<h3 class="hasAnchor" id="sec-把随机森林当作自适应邻域寻找器">
 <a href="#random-forest-as-an-adaptive-neighborhood-finder" class="anchor"></a>把随机森林当作自适应邻域寻找器</h3>
 <p>Breiman 的随机森林分两个阶段来估计条件均值 <span class="math inline">\(\mu(x) = \text{E}[Y_i \mid X_i = x]\)</span>：</p>
 <ol style="list-style-type: decimal">
@@ -247,7 +278,7 @@ e^{(-i)}(X_i),~ \text{weights} = \textcolor{magenta}{\alpha_i(x)}
 </blockquote>
 </div>
 <div id="efficiently-estimating-summaries-of-the-cates" class="section level3">
-<h3 class="hasAnchor">
+<h3 class="hasAnchor" id="sec-高效估计-cate-的汇总量">
 <a href="#efficiently-estimating-summaries-of-the-cates" class="anchor"></a>高效估计 CATE 的汇总量</h3>
 <p>Robinson 的残差对残差方法是正交的，因此很适合那些收敛较慢的估计。但如果我们想要 <span class="math inline">\(\tau(x)\)</span> 的一些汇总量——比如 ATE 或最优线性投影（best linear projection，BLP）——并且要求它们具有保证的 √n 收敛速率，还要配上有精确置信区间呢？</p>
 <p>简单地对估计值 <span class="math inline">\(\hat\tau(X_i)\)</span> 取平均并不是最优的：预测误差太大，而且不会相互抵消。Robins、Rotnitzky 与 Zhao（<a href="https://doi.org/10.1080/01621459.1994.10476818">1994</a>）提出了增强逆概率加权（Augmented Inverse Probability Weighted，AIPW）估计量，它把倾向得分与条件均值估计结合起来，对其中任一分量估计误差都具有稳健性。它可以表示为一种"一步去偏"（one-step debiasing）校正，形式如下：</p>
@@ -269,7 +300,7 @@ x, W_i = w]\)</span>（这一点可以从因果森林的拟合结果中反推出
 </div>
 </div>
 <div id="assessing-heterogeneity-with-toc-curves" class="section level3">
-<h3 class="hasAnchor">
+<h3 class="hasAnchor" id="sec-用-toc-曲线评估异质性">
 <a href="#assessing-heterogeneity-with-toc-curves" class="anchor"></a>用 TOC 曲线评估异质性</h3>
 <p>结合诚实估计（honesty）和子抽样（subsampling）等技术（Wager 与 Athey，<a href="https://doi.org/10.1080/01621459.2017.1319839">2018</a>），广义随机森林算法具备逐点渐近保证（pointwise asymptotic guarantee）。这类结果令人安心，因为它们刻画了森林在大样本下的行为。不过从实用角度看，还有更直接、更透明的方式来检验某个数据集中是否存在有意义的异质性。</p>
 <p>一种简单而务实的做法是训练/测试集评估（train/test evaluation）。我们在训练集上拟合一个 CATE 模型，然后在留出（held-out）的测试集上，根据预测出的处理效应划分亚组，并检查各组的平均处理效应是否存在系统性差异。这种方法相当通用：我们可以评估任何机器学习得到的靶向函数（targeting function），包括替代性的效应指标，比如预测风险（predicted risk）或在某应用场景中可能与治疗获益相对应的其他量。只要"值越大、预期治疗获益越高"这一关系成立，同样的评估逻辑就适用（关于不依赖单一训练/测试划分的方法，可参见例如 Wager，<a href="https://arxiv.org/abs/2405.05534">2024</a>）。</p>
@@ -285,7 +316,7 @@ x, W_i = w]\)</span>（这一点可以从因果森林的拟合结果中反推出
 </div>
 </div>
 <div id="policy-evaluation-with-qini-curves" class="section level3">
-<h3 class="hasAnchor">
+<h3 class="hasAnchor" id="sec-用-qini-曲线评估策略">
 <a href="#policy-evaluation-with-qini-curves" class="anchor"></a>用 Qini 曲线评估策略</h3>
 <p>我们经常关心用数据驱动的规则来指导治疗分配决策，这类规则也称为策略（policy）。在二元处理下，一个策略就是一条规则 <span class="math inline">\(\pi(X_i) \in \{0, 1\}\)</span>，把协变量映射到某个处理决策。一个策略的价值（value）就是遵循它所带来的预期收益，<span class="math display">\[
 G(\pi) = \text{E}[\pi(X_i)\{Y_i(1) - Y_i(0)\}].
@@ -310,7 +341,7 @@ G(\pi_B) = \text{E}[\pi_B(X_i)\{Y_i(1) - Y_i(0)\}],
 \]</span> 利用双稳健得分和合适的重抽样方法，我们可以得到整条曲线上 <span class="math inline">\(G(\pi_B)\)</span> 的置信区间。这一方法在姊妹包 <a href="https://CRAN.R-project.org/package=maq"><code>maq</code></a>（Sverdrup 等人，<a href="https://doi.org/10.1080/10618600.2024.2418820">2025</a>）中实现，该包还支持带可变成本的多处理臂——它通过求解一个中间的线性规划（linear program），把预测效应与成本映射为受预算约束的策略。</p>
 </div>
 <div id="learning-interpretable-policies" class="section level3">
-<h3 class="hasAnchor">
+<h3 class="hasAnchor" id="sec-学习可解释的策瑋">
 <a href="#learning-interpretable-policies" class="anchor"></a>学习可解释的策瑋</h3>
 <p>在某些应用中，直接依据复杂、黑箱式的 CATE 预测来分配治疗并不可取。决策者往往要求透明、可解释的决策规则——只基于少数几个可观测特征来分配治疗。这类策略易于沟通和落地（例如，在数据库查询里写几条条件语句即可），同时又利用了处理效应的异质性。</p>
 <p>给定实验性或观察性数据，我们可以通过最大化策略价值来学习这类可解释策略，<span class="math display">\[
@@ -320,7 +351,7 @@ V(\pi) = \text{E}[Y_i(\pi(X_i))],
 </div>
 </div>
 <div id="example-treatment-heterogeneity-and-financial-proficiency" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-实例-处理效应的异质性与金融素养">
 <a href="#example-treatment-heterogeneity-and-financial-proficiency" class="anchor"></a>实例：处理效应的异质性与金融素养</h2>
 <p>作为一个简单的实证示例，我们用 <code>causal_forest</code> 函数来分析一项随机对照试验（RCT），该试验测量了金融教育的效果。Bruhn 等人（<a href="https://doi.org/10.1257/app.20150149">2016</a>）把巴西的高中随机分配参与一个金融教育项目，并测量了诸如金融素养（financial proficiency）等结局。在学校层面做随机化，可以避免学生之间的相互干扰。我们使用 <code>grf</code> 内置的一份已处理数据，包含约 850 所高中、约 17,000 名学生的个体层面信息。结局是处理后的金融读写能力，共有 13 个处理前协变量，包括问卷回答，以及衡量学生储蓄能力和财务自主度的两个指数。</p>
 <p>有 4% 到 10% 的协变量含有缺失值（<code>NA</code>）。我们假设缺失是随机的并将其保留，因为 <code>grf</code> 通过"把缺失性纳入属性"（missingness incorporated in attributes，MIA）切分来处理缺失数据（Mayer 等人，<a href="https://doi.org/10.1214/20-AOAS1356">2020</a>；Twala 等人，<a href="https://doi.org/10.1016/j.patrec.2008.01.010">2008</a>）。</p>
@@ -443,7 +474,7 @@ V(\pi) = \text{E}[Y_i(\pi(X_i))],
 <!-- -------------------APPLICATION: POVERTY------------------- -->
 </div>
 <div id="example-the-effect-of-poverty-on-attention" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-实例-贫困对注意力的影响">
 <a href="#example-the-effect-of-poverty-on-attention" class="anchor"></a>实例：贫困对注意力的影响</h2>
 <p>本节我们分析 Carvalho 等人（<a href="https://www.aeaweb.org/articles?id=10.1257/aer.20140481">2016</a>）最初研究过的实验数据。作者做了一项随机实验：让低收入个体在发薪日之前或之后完成一项认知测试。结局是某认知测试中的答对题数。原研究没有发现统计显著的平均效应。但后续分析表明，贫困可能会损害某些亚群的认知功能（Farbmacher 等人，<a href="https://doi.org/10.1016/j.labeco.2021.102028">2021</a>）。<code>grf</code> 中提供了一份已处理的数据，包含约 2,500 名个体和 24 个处理前特征（年龄、收入、教育程度等）。教育程度按有序编码（4：大学毕业；3：部分大学；2：高中毕业；1：高中以下），因此可以直接用于随机森林的切分。</p>
 <p>我们对处理状态做如下编码：若个体在发薪日之后被观测，则 <span class="math inline">\(W_i=1\)</span>。按此编码，正的处理效应就对应认知表现改善（即损害减轻）。这种选择简化了理解：例如，当优先级排序成功锁定获益最大的个体时，TOC 曲线为正。用潜在结局（potential outcomes）记号，令 <span class="math inline">\(Y_i(1)\)</span> 表示"无贫困"状态（发薪日后）下的答对题数，<span class="math inline">\(Y_i(0)\)</span> 表示财务困顿（发薪日前）下的答对题数。平均处理效应为 <span class="math display">\[
@@ -507,7 +538,7 @@ X_i]\)</span>，再用森林的变量重要性选出一部分协变量用于 CAT
 </center>
 </div>
 <div id="references" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-参考文献">
 <a href="#references" class="anchor"></a>参考文献</h2>
 <p>Athey, Susan, Julie Tibshirani, and Stefan Wager. “Generalized random
 forests.” The Annals of Statistics 47, no. 2 (2019): 1148-1178.</p>
@@ -605,5 +636,6 @@ Statistics 17, no. 2 (2008): 492-514.</p>
     <p>本页为 <a href="https://grf-labs.github.io/grf/articles/grf_guide.html" target="_blank" rel="noopener">grf 官方文档</a> 的中文译本，原文版权归 grf 作者所有，依据项目许可（MIT）翻译并注明出处，仅供学习交流。代码与公式保持原样，译文新增的「背景与解释」框为译者补充。</p>
   </div>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
