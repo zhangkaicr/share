@@ -123,6 +123,35 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 :root[data-theme="dark"] .note code{background:rgba(0,0,0,.35)}
 :root[data-theme="dark"] .card{background:var(--card)}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -135,7 +164,9 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
   <p class="sub">译自 <a href="https://som-shahlab.github.io/survlearners/articles/intro.html" target="_blank" rel="noopener">som-shahlab.github.io/survlearners · Getting started</a>｜作者：斯坦福医学院 SOM ShahLab｜许可：GPL-3｜本页为个人学习用途的非官方中文译本，引用请以英文原文为准</p>
   <div class="content">
 <div class="lead">
-<p>本页对应官方站点的 "Getting started" 一页，原文只有一行代码——加载 survlearners 包。为便于医学研究者上手，译文在保留该代码的基础上补充了必要的背景说明与检查步骤。</p>
+<p>本页对应官方站点的 "Getting started" 一页，原文只有一行代码——加载 survlearners 包。为便于医学研究者上手，译文在保留该代码的基础上补充了必要的背景说明与检查步骤。</p><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span>
 </div>
 
 <h2 id="load">加载 survlearners</h2>
@@ -192,5 +223,6 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
     <p>方法论文出处：Xu Y., Ignatiadis N., Sverdrup E., Fleming S., Wager S., Shah N. (2022). <em>Handbook of Matching and Weighting Adjustments for Causal Inference</em>，章节 “Treatment Heterogeneity with Survival Outcomes”，Chapman &amp; Hall/CRC Press（<a href="https://arxiv.org/abs/2207.07758" target="_blank" rel="noopener">arXiv:2207.07758</a>）；R-learner：Nie X. &amp; Wager S. (2021). “Quasi-oracle estimation of heterogeneous treatment effects.” <em>Biometrika</em> 108(2):299–319（<a href="https://academic.oup.com/biomet/article/108/2/299/5911092" target="_blank" rel="noopener">链接</a>）；meta-learner 综述：Künzel S.R. et al. (2019). <em>PNAS</em> 116(10):4156–4165。</p>
     <p>许可：GPL-3（<a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener">GNU General Public License v3.0</a>）。本页为个人学习用途的非官方中文译本，引用请以英文原文为准。</p></div>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
