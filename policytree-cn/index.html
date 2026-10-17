@@ -136,6 +136,35 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -195,8 +224,9 @@ library(grf)</code></pre>
     <li><a href="#runtime">树搜索的运行时间怎么估</a></li>
     <li><a href="#hybrid">用混合搜索拟合更深的树</a></li>
     <li><a href="#cheatsheet">附录：函数速查与术语对照</a></li>
-  </ol>
-</nav>
+  </ol><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span></nav>
 
 <h2 id="ex1">示例 1：二元处置 —— 效应估计与策略学习</h2>
 <p>先模拟一份数据：<code>n = 10000</code> 人、<code>p = 10</code> 个协变量，处置概率 <code>ee</code> 依赖 X<sub>3</sub>（这制造了需要校正的混淆），真实处置效应 <code>tt</code> 依赖 X<sub>1</sub> 与 X<sub>2</sub>（这是我们希望学到的异质性）。结果变量 Y = X<sub>3</sub> + W·τ(X) + 噪声。</p>
@@ -218,7 +248,7 @@ plot(tt, predict(cf)$predictions)</code></pre>
   <figcaption>图 1：横轴为真实 τ(X)，纵轴为 <code>predict(cf)$predictions</code>。点越贴近对角线，说明个体化效应估计越准</figcaption>
 </figure>
 
-<h3>从森林到策略树</h3>
+<h3 id="sec-从森林到策略树">从森林到策略树</h3>
 <p>接下来是 policytree 的关键两步。第一步把森林转成双重稳健得分矩阵 <code>dr</code>（每一行是一个人，两列分别对应「不处置」与「处置」的收益估计）；第二步在这个矩阵上搜索最优的深度 2 树。</p>
 <pre><code>dr &lt;- double_robust_scores(cf)
 tree &lt;- policy_tree(X, dr, 2)
@@ -506,5 +536,6 @@ htree
 </footer>
 
 </div>
+<script src="search.js"></script>
 </body>
 </html>
