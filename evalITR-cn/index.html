@@ -89,8 +89,40 @@ a{color:var(--accent)}
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
+<div style="margin:16px 0"><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span></div>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
   <svg class="ico-sun" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12H5M19 12h2.4M5.3 5.3l1.7 1.7M17 17l1.7 1.7M18.7 5.3L17 7M7 17l-1.7 1.7"/></svg>
   <svg class="ico-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 14.5A8.2 8.2 0 0 1 9.5 4a8.2 8.2 0 1 0 10.5 10.5z"/></svg>
@@ -109,9 +141,9 @@ a{color:var(--accent)}
     </div>
   </header>
 
-  <h2>入门</h2>
+  <h2 id="sec-入门">入门</h2>
   <a class="card" href="overview.html">
-    <h3>evalITR：评估个体化治疗规则（ITR）</h3>
+    <h3 id="sec-evalitr-评估个体化治疗规则-itr">evalITR：评估个体化治疗规则（ITR）</h3>
     <p>包总览 / README。一句话讲清 evalITR 能做什么、核心指标 PAPE / AUPEC / GATEs 大致衡量什么，以及方法出处。</p>
     <div class="meta">
       <span class="tag k">总览</span>
@@ -120,7 +152,7 @@ a{color:var(--accent)}
     </div>
   </a>
   <a class="card" href="install.html">
-    <h3>安装 evalITR</h3>
+    <h3 id="sec-安装-evalitr">安装 evalITR</h3>
     <p>从 CRAN 安装稳定版，或从 GitHub 安装开发版；顺带解释依赖包与并行计算的作用。</p>
     <div class="meta">
       <span class="tag k">安装</span>
@@ -129,9 +161,9 @@ a{color:var(--accent)}
     </div>
   </a>
 
-  <h2>核心方法：样本分割与自定义规则</h2>
+  <h2 id="sec-核心方法-样本分割与自定义规则">核心方法：样本分割与自定义规则</h2>
   <a class="card" href="sample_split.html">
-    <h3>样本分割（Sample Splitting）</h3>
+    <h3 id="sec-样本分割-sample-splitting">样本分割（Sample Splitting）</h3>
     <p>评估 ITR 为何必须把"训练模型"和"评估效果"分成两批数据，否则会产生乐观偏差与过拟合；与交叉验证的关系。</p>
     <div class="meta">
       <span class="tag k">样本分割</span>
@@ -140,7 +172,7 @@ a{color:var(--accent)}
     </div>
   </a>
   <a class="card" href="sample_split_caret.html">
-    <h3>用 Caret / SuperLearner 做样本分割</h3>
+    <h3 id="sec-用-caret-superlearner-做样本分割">用 Caret / SuperLearner 做样本分割</h3>
     <p>用 caret、SuperLearner 这类集成学习框架来拟合 ITR，并配合样本分割得到无偏评估。</p>
     <div class="meta">
       <span class="tag k">caret</span>
@@ -149,7 +181,7 @@ a{color:var(--accent)}
     </div>
   </a>
   <a class="card" href="user_itr.html">
-    <h3>用户自定义个体化治疗规则（ITR）</h3>
+    <h3 id="sec-用户自定义个体化治疗规则-itr">用户自定义个体化治疗规则（ITR）</h3>
     <p>研究者自己写规则函数（unit-level score，约定 score&lt;0 不治疗），与"数据驱动估计的 ITR"对比。</p>
     <div class="meta">
       <span class="tag k">用户自定义 ITR</span>
@@ -157,7 +189,7 @@ a{color:var(--accent)}
     </div>
   </a>
   <a class="card" href="user_itr_algs.html">
-    <h3>比较估计的 ITR 与用户自定义 ITR</h3>
+    <h3 id="sec-比较估计的-itr-与用户自定义-itr">比较估计的 ITR 与用户自定义 ITR</h3>
     <p>如何公平比较"数据估计出的规则"和"专家自定义规则"，读懂 AUPEC 曲线与模型摘要指标。</p>
     <div class="meta">
       <span class="tag k">规则比较</span>
@@ -166,9 +198,9 @@ a{color:var(--accent)}
     </div>
   </a>
 
-  <h2>交叉验证评估</h2>
+  <h2 id="sec-交叉验证评估">交叉验证评估</h2>
   <a class="card" href="cv_single_alg.html">
-    <h3>用单一算法做交叉验证</h3>
+    <h3 id="sec-用单一算法做交叉验证">用单一算法做交叉验证</h3>
     <p>K 折交叉验证在 ITR 评估里为何关键，以及如何得到无偏的 AUPEC 估计。</p>
     <div class="meta">
       <span class="tag k">交叉验证</span>
@@ -177,7 +209,7 @@ a{color:var(--accent)}
     </div>
   </a>
   <a class="card" href="cv_multiple_alg.html">
-    <h3>用多种机器学习算法做交叉验证</h3>
+    <h3 id="sec-用多种机器学习算法做交叉验证">用多种机器学习算法做交叉验证</h3>
     <p>同时比较多种 ML 算法（glmnet、randomForest 等），选出最佳算法并理解算法间 AUPEC 差异的含义。</p>
     <div class="meta">
       <span class="tag k">交叉验证</span>
@@ -191,5 +223,6 @@ a{color:var(--accent)}
     源代码：<a href="https://github.com/MichaelLLi/evalITR" target="_blank" rel="noopener">github.com/MichaelLLi/evalITR</a>。
   </footer>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
