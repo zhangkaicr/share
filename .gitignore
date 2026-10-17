@@ -1,0 +1,13 @@
+# 构建脚本（本地使用，不部署）
+_tools/
+
+# 翻译中间片段
+*.frag.html
+_src/
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+.playwright-cli/
