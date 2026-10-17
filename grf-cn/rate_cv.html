@@ -133,6 +133,35 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -142,7 +171,9 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 
 <div class="wrap">
   <div class="topbar">
-    <a class="back" href="index.html">&larr; grf 教程总览</a>
+    <a class="back" href="index.html">&larr; grf 教程总览</a><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span>
   </div>
   <h1>异质性的交叉验证（RATE-CV）</h1>
   <p class="sub">原文：<a href="https://grf-labs.github.io/grf/articles/rate_cv.html" target="_blank" rel="noopener">Cross-fold validation of heterogeneity</a>（英文）&nbsp;·&nbsp;grf 官方文档中文译本</p>
@@ -156,7 +187,7 @@ pre code{background:none;padding:0;font-size:13.5px;color:var(--code-text)}
 
 <div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">grf</span>)</pre></div>
 <div id="cross-fold-estimation-of-rate-metrics" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-rate-指标的交叉折叠估计">
 <a href="#cross-fold-estimation-of-rate-metrics" class="anchor"></a>RATE 指标的交叉折叠估计</h2>
 <p>如 RATE 篇教程所述，RATE 指标本身就可以作为「是否存在处理效应异质性」的检验工具。一个常见的做法是：先用训练集拟合出条件平均处理效应（CATE）的估计，再在一个留出的测试集上用 RATE 去评估它。具体来说，我们在训练集上得到某个估计出的 CATE 函数 <span class="math inline">\(\hat \tau(\cdot)\)</span>，然后在测试集上算出 RATE 的估计值，并据此构造如下假设检验：</p>
 <p><span class="math inline">\(H_0\)</span>：RATE <span class="math inline">\(=0\)</span>（即 <span class="math inline">\(\hat \tau(\cdot)\)</span> 没有检出异质性）</p>
@@ -222,7 +253,7 @@ t = \frac{\widehat{RATE}}{\sqrt{Var(\widehat{RATE})}}.
 
 </div>
 <div id="sequential-cross-fold-estimation" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-顺序交叉折叠估计">
 <a href="#sequential-cross-fold-estimation" class="anchor"></a>顺序交叉折叠估计</h2>
 <p>不过，确实存在一个简单的算法修正，可以弥补朴素交叉折叠验证的上述缺陷。我们称之为<strong>顺序</strong>交叉折叠估计（<strong>sequential</strong> cross-fold estimation）的方法，它只按先后顺序使用训练折，从而打断了各折之间 RATE 指标的相关性。如下图所示，这套策略会给出 <span class="math inline">\(K -
 1\)</span> 个相互独立的 <span class="math inline">\(t\)</span> 值。</p>
@@ -320,7 +351,7 @@ t = \frac{\widehat{RATE}}{\sqrt{Var(\widehat{RATE})}}.
 
 </div>
 <div id="heuristic-out-of-bag-estimation-with-one-sided-tests" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-启发式方法-基于单侧检验的袋外-oob-估计">
 <a href="#heuristic-out-of-bag-estimation-with-one-sided-tests" class="anchor"></a>启发式方法：基于单侧检验的袋外（OOB）估计</h2>
 <p>用同一批数据既去估计 CATE、又去评估异质性是否存在，其核心困难在于过拟合：说到底，我们受制于一个事实——不能简单地用同一份数据既做估计又做评估。我们已经看到，朴素交叉折叠估计由于折之间存在相关性（这会把估计值向下偏倚），并没有真正解决这个难题。要「挽救」这种朴素聚合，一个启发式办法是使用<strong>单侧</strong> p 值。只要我们愿意事先确定一个单侧检验的方向——比如检验 RATE <span class="math inline">\(&gt;0\)</span>——它就能成为一个有用的策略。</p>
 <p>不过，随机森林提供了一种比简单交叉折叠更省算力的替代方案。森林原生的「留一」估计就是袋外（out-of-bag，OOB）估计。对于第 <span class="math inline">\(i\)</span> 个个体，OOB 估计只使用那些「没有包含第 <span class="math inline">\(i\)</span> 个个体」的子样本所生长出来的树来构造。当我们要用全部数据同时拟合并评估异质性时，把 OOB 估计的 RATE 与单侧检验搭配起来，就是一个很有用的启发式方法。</p>
@@ -381,7 +412,7 @@ t = \frac{\widehat{RATE}}{\sqrt{Var(\widehat{RATE})}}.
 
 </div>
 <div id="references" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-参考文献">
 <a href="#references" class="anchor"></a>参考文献</h2>
 <p>Chernozhukov, Victor, Mert Demirer, Esther Duflo, and Ivan
 Fernandez-Val. Generic machine learning inference on heterogeneous
@@ -396,7 +427,7 @@ heterogeneous treatment effects. <em>Biometrika 108(2), 2021</em>.</p>
 <em>arXiv preprint arXiv:2405.05534</em> (<a href="https://arxiv.org/abs/2405.05534">arxiv</a>)</p>
 </div>
 <div id="appendix-median-aggregation-of-p-values" class="section level2">
-<h2 class="hasAnchor">
+<h2 class="hasAnchor" id="sec-附录-p-值的中位数聚合">
 <a href="#appendix-median-aggregation-of-p-values" class="anchor"></a>附录：p 值的中位数聚合</h2>
 <p>还有一种思路可以「挽救」 <code>rate_cv_naive</code>：保留传统的 <span class="math inline">\(K\)</span> 折结构，但改变各折 t 统计量的聚合方式。这正是 Chernozhukov 等人（2024）采取的做法。与其基于「聚合后的 t 统计量」去算一个 p 值，不如先为每一个 t 统计量分别算出一个 p 值，再取这些 p 值的中位数——这样就能得到一个有效的检验。</p>
 <div class="sourceCode" id="cb9"><pre class="r"><span class="co"># 本函数与 rate_naive 基本一致，只是返回</span>
@@ -478,5 +509,6 @@ heterogeneous treatment effects. <em>Biometrika 108(2), 2021</em>.</p>
     <p>本页为 <a href="https://grf-labs.github.io/grf/articles/rate_cv.html" target="_blank" rel="noopener">grf 官方文档</a> 的中文译本，原文版权归 grf 作者所有，依据项目许可（MIT）翻译并注明出处，仅供学习交流。代码与公式保持原样，译文新增的「背景与解释」框为译者补充。</p>
   </div>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
