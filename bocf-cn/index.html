@@ -108,6 +108,35 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 @media(max-width:640px){.tt{top:10px; right:10px; width:36px; height:36px}}
 @media print{.tt{display:none}}
 </style>
+<style>
+/* ---- 全局搜索 ---- */
+.sbox{position:relative;display:inline-flex;align-items:center;margin-left:10px}
+.sbox input{background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);color:inherit;
+ border-radius:6px;padding:4px 9px 4px 25px;font-size:13px;width:170px;font-family:inherit;outline:none}
+.sbox input:focus{border-color:#4ea1ff;width:220px}
+.sbox .si{position:absolute;left:8px;font-size:12px;opacity:.6;pointer-events:none}
+.spanel{display:none;position:absolute;top:calc(100% + 6px);right:0;width:440px;max-width:88vw;
+ max-height:64vh;overflow-y:auto;z-index:900;background:var(--panel,#262c34);
+ border:1px solid var(--border,#3a4350);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.45);padding:6px}
+.spanel.open{display:block}
+.spanel .sh{padding:7px 10px;font-size:12px;opacity:.7;border-bottom:1px solid var(--border,#3a4350);margin-bottom:4px}
+.spanel .sempty{font-size:12px;opacity:.65;padding:16px 10px;text-align:center}
+.sres{display:block;padding:7px 10px;border-radius:7px;text-decoration:none;color:inherit}
+.sres:hover,.sres.sel{background:var(--panel2,#2e3540)}
+.sres .c{font-size:11px;opacity:.65;margin-bottom:1px}
+.sres .s{font-size:12px;color:#4ea1ff;margin-bottom:2px}
+.sres .t{font-size:13px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sres mark{background:rgba(255,200,0,.35);color:inherit;border-radius:2px;padding:0 1px}
+.srch-main{margin:22px 0}
+.srch-main input{width:100%;background:var(--panel2,#2e3540);border:1px solid var(--border,#3a4350);
+ color:inherit;border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.srch-main input:focus{border-color:#4ea1ff}
+.srch-meta{font-size:13px;opacity:.7;margin:12px 0 6px}
+.srch-list{list-style:none;margin:0;padding:0}
+.srch-list .sres{border:1px solid var(--border,#3a4350);margin:7px 0;padding:9px 11px}
+.srch-list .sres:hover{border-color:#4ea1ff}
+@media (max-width:640px){.sbox input{width:110px}.sbox input:focus{width:150px}.spanel{width:86vw}}
+</style><!--search.css-marker-->
 </head>
 <body>
 <button id="theme-toggle" class="tt" type="button" aria-label="切换明暗主题" title="切换明暗主题 (Alt+T)">
@@ -117,28 +146,30 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 
 <div class="wrap">
   <div class="topbar">
-    <a class="back" href="../index.html">&larr; 返回 share 总目录</a>
+    <a class="back" href="../index.html">&larr; 返回 share 总目录</a><span class="sbox"><span class="si">&#128269;</span>
+<input type="search" id="s-q" placeholder="搜索本站…（按 /）" autocomplete="off" aria-label="搜索本站">
+<span class="spanel" id="s-panel"></span></span>
   </div>
   <h1>重新审视基线观测结转（BOCF）：临床试验缺失数据处理的一种方法学探讨</h1>
   <p class="byline">Hong Liu-Seifert, Shuyu Zhang, Deborah D'Souza, Vladimir Skljarevski</p>
   <p class="sub">原文：<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2819899/" target="_blank" rel="noopener">A closer look at the baseline-observation-carried-forward (BOCF)</a>（英文）&nbsp;·&nbsp;发表于 Patient Preference and Adherence（2010 年 2 月 4 日（在线发表））&nbsp;·&nbsp;DOI: 10.2147/ppa.s8135</p>
 
   <div class="content">
-<section class="body main-article-body"><section class="abstract" id="abstract1"><h2>摘要</h2>
-<section id="sec1"><h3 class="pmc_sec_title">目的：</h3>
-<p>基线观测结转（BOCF）法是处理因提前终止治疗而产生缺失数据的一种方法。我们考察了这一方法的若干改良方案，并综合考虑了治疗相关与非治疗相关的终止原因。</p></section><section id="sec2"><h3 class="pmc_sec_title">方法：</h3>
-<p>我们采用两项度洛西汀慢性疼痛试验（安慰剂对照）来考察不同分析方法对研究结果的影响。我们将终止治疗的原因归类为治疗相关和非治疗相关两类。主要疗效结局中的缺失数据采用五种统计方法处理：混合模型重复测量（MMRM）、末次观测结转（LOCF）、BOCF、改良 BOCF（mBOCF，即因治疗相关原因——不良事件[AEs]或疗效不佳——而终止者），以及 aeBOCF（仅因不良事件而终止者）。</p></section><section id="sec3"><h3 class="pmc_sec_title">结果：</h3>
-<p>在简明疼痛量表（BPI）平均疼痛评分自基线的平均变化上，度洛西汀采用 MMRM（研究 1，<em>P</em> = 0.004；研究 2，<em>P</em> &lt; 0.001）、LOCF（研究 1，<em>P</em> = 0.019；研究 2，<em>P</em> &lt; 0.001）、BOCF（研究 1，<em>P</em> = 0.019；研究 2，<em>P</em> = 0.013）和 mBOCF（研究 1，<em>P</em> = 0.041；研究 2，<em>P</em> = 0.005）时均优于安慰剂。采用 aeBOCF 时，度洛西汀在研究 2 中优于安慰剂（<em>P</em> = 0.005），在研究 1 中数值上更优但未达显著（<em>P</em> = 0.075）。</p></section><section id="sec4"><h3 class="pmc_sec_title">结论：</h3>
-<p>由于不同方法对缺失数据的处理基于不同的假设，所选分析方法可能会影响对研究结果的解释。应重视来自患者实际治疗结局的影响。采用不同的统计方法（如敏感性分析）有助于评估研究结果的稳健性，并更准确地反映治疗结局。</p></section><section id="kwd-group1" class="kwd-group"><p><strong>关键词：</strong>终止治疗、治疗相关、疼痛、统计学</p></section></section><section id="sec5"><h2 class="pmc_sec_title">引言</h2>
+<section class="body main-article-body"><section class="abstract" id="abstract1"><h2 id="sec-摘要">摘要</h2>
+<section id="sec1"><h3 class="pmc_sec_title" id="sec-目的">目的：</h3>
+<p>基线观测结转（BOCF）法是处理因提前终止治疗而产生缺失数据的一种方法。我们考察了这一方法的若干改良方案，并综合考虑了治疗相关与非治疗相关的终止原因。</p></section><section id="sec2"><h3 class="pmc_sec_title" id="sec-方法">方法：</h3>
+<p>我们采用两项度洛西汀慢性疼痛试验（安慰剂对照）来考察不同分析方法对研究结果的影响。我们将终止治疗的原因归类为治疗相关和非治疗相关两类。主要疗效结局中的缺失数据采用五种统计方法处理：混合模型重复测量（MMRM）、末次观测结转（LOCF）、BOCF、改良 BOCF（mBOCF，即因治疗相关原因——不良事件[AEs]或疗效不佳——而终止者），以及 aeBOCF（仅因不良事件而终止者）。</p></section><section id="sec3"><h3 class="pmc_sec_title" id="sec-结果">结果：</h3>
+<p>在简明疼痛量表（BPI）平均疼痛评分自基线的平均变化上，度洛西汀采用 MMRM（研究 1，<em>P</em> = 0.004；研究 2，<em>P</em> &lt; 0.001）、LOCF（研究 1，<em>P</em> = 0.019；研究 2，<em>P</em> &lt; 0.001）、BOCF（研究 1，<em>P</em> = 0.019；研究 2，<em>P</em> = 0.013）和 mBOCF（研究 1，<em>P</em> = 0.041；研究 2，<em>P</em> = 0.005）时均优于安慰剂。采用 aeBOCF 时，度洛西汀在研究 2 中优于安慰剂（<em>P</em> = 0.005），在研究 1 中数值上更优但未达显著（<em>P</em> = 0.075）。</p></section><section id="sec4"><h3 class="pmc_sec_title" id="sec-结论">结论：</h3>
+<p>由于不同方法对缺失数据的处理基于不同的假设，所选分析方法可能会影响对研究结果的解释。应重视来自患者实际治疗结局的影响。采用不同的统计方法（如敏感性分析）有助于评估研究结果的稳健性，并更准确地反映治疗结局。</p></section><section id="kwd-group1" class="kwd-group"><p><strong>关键词：</strong>终止治疗、治疗相关、疼痛、统计学</p></section></section><section id="sec5"><h2 class="pmc_sec_title" id="sec-引言">引言</h2>
 <p>临床试验的开展旨在对所有入组患者进行治疗与评价。临床试验中最常见的问题之一，是难以评价那些无法完成全部试验流程或中途退出的患者的数据。患者退出临床试验的原因很多，包括依从性差、不便、日程冲突、违反方案、不良事件、死亡、过早康复，或其他往往超出研究者控制能力的"非治疗相关"原因。无论如何，任何退出试验的理由都会导致这些患者（脱落者）的数据缺失，并可能使最终研究结局产生潜在偏倚。因此，妥善处理脱落、对临床试验结局进行合理分析十分重要。</p>
 <p>已有多种统计方法被用于临床试验中的缺失数据处理。其中之一是末次观测结转（LOCF）法，以末次非缺失观测值替代缺失的终点值。然而，这一方法存在缺陷：它会给出有偏的治疗效应估计，以及对"无治疗效应"这一原假设的有偏检验。<a href="#b1-ppa-4-011" class="usa-link" aria-describedby="b1-ppa-4-011"><sup>1</sup></a> 此外，若活性药组与安慰剂组的脱落率相同，LOCF 倾向于低估治疗效应；而当两组脱落率不等时，偏倚可能以任一方向大幅放大。<a href="#b2-ppa-4-011" class="usa-link" aria-describedby="b2-ppa-4-011"><sup>2</sup></a> 再者，LOCF 法必须假设受试者的测量值自脱落之时起至试验结束始终停留在同一水平。另一种方法是混合模型重复测量（MMRM）分析，它利用基于似然的估计、个体特异性效应以及重复测量间的相关性。<a href="#b3-ppa-4-011" class="usa-link" aria-describedby="b3-ppa-4-011"><sup>3</sup></a> 该方法在作为主分析时被认为更为可靠，有时也比采用末次或基线观测结转（BOCF）的简单填补方法更受青睐。<a href="#b4-ppa-4-011" class="usa-link" aria-describedby="b4-ppa-4-011"><sup>4</sup></a> BOCF 是另一种用于处理患者脱落的方法。<a href="#b5-ppa-4-011" class="usa-link" aria-describedby="b5-ppa-4-011"><sup>5</sup></a> BOCF 与 LOCF 的区别在于：BOCF 用基线观测值，而 LOCF 用末次观测值，来替代缺失的终点值。BOCF 法要求患者仍留在试验中，才能被评价为应答者。</p>
 <p>我们利用两项度洛西汀治疗慢性疼痛的临床试验数据——即慢性下腰痛（CLBP，研究 1）<a href="#b6-ppa-4-011" class="usa-link" aria-describedby="b6-ppa-4-011"><sup>6</sup></a> 和膝骨关节炎（OA）慢性疼痛（研究 2）<a href="#b7-ppa-4-011" class="usa-link" aria-describedby="b7-ppa-4-011"><sup>7</sup></a>——考察了患者退出试验的潜在原因及其在 BOCF 法中的作用，并建议对 BOCF 法进行改良，以考虑治疗相关与非治疗相关的终止原因。</p>
 <div class="note"><span class="nt">背景与解释</span>
 <p><strong>缺失数据的机制（MCAR / MAR / MNAR）与 BOCF、LOCF 的隐含假设。</strong>临床试验中的缺失并非随机，统计学上通常分为三类：<em>完全随机缺失（MCAR）</em>，即缺失与任何已观测或未观测变量均无关；<em>随机缺失（MAR）</em>，即缺失仅与已观测变量有关；<em>非随机缺失（MNAR）</em>，即缺失与未观测到的结局本身有关（例如疼痛真正加重的患者更可能停药）。LOCF 隐含假设脱落者的疗效在停药后"冻结"于末次水平，BOCF 则假设脱落者回落到基线（即治疗毫无残留效应，最保守）。在疼痛等主观结局试验中，这两种假设都容易被违背：若患者因疗效好（如治愈或转用其他治疗）而停药，LOCF 会高估、BOCF 会低估疗效；若因副作用停药，两类方法都可能掩盖真实疗效，从而偏向假阴性（掩盖疗效）。因此，BOCF / LOCF 的结论必须谨慎解读。</p>
-</div></section><section id="sec6"><h2 class="pmc_sec_title">方法</h2>
+</div></section><section id="sec6"><h2 class="pmc_sec_title" id="sec-方法-2">方法</h2>
 <p>本研究在两项为期 13 周、随机、双盲、安慰剂对照试验中进行。研究 1 纳入经临床诊断患有 CLBP 的男性和女性患者（度洛西汀 N = 115，安慰剂 N = 121）。研究 2 纳入 ≥40 岁的男性和女性膝 OA 患者（度洛西汀 N = 128，安慰剂 N = 128）。两项研究的患者特征具有可比性。各研究的患者人口学资料及其他特征信息此前已有报道。<a href="#b6-ppa-4-011" class="usa-link" aria-describedby="b6-ppa-4-011"><sup>6</sup></a><sup>,</sup><a href="#b7-ppa-4-011" class="usa-link" aria-describedby="b7-ppa-4-011"><sup>7</sup></a></p>
 <p>这些临床研究的主要目标是，以简明疼痛量表（BPI）24 小时平均疼痛评分衡量，评估度洛西汀相比安慰剂在减轻疼痛程度方面的疗效。</p>
-<section id="sec7"><h3 class="pmc_sec_title">统计分析</h3>
+<section id="sec7"><h3 class="pmc_sec_title" id="sec-统计分析">统计分析</h3>
 <p>两项研究的主疗效分析均为：采用 MMRM 方法分析 BPI 平均疼痛自基线的平均变化。</p>
 <p>LOCF 和 BOCF 均在研究方案中预先设定为附加分析方法。对于完成治疗阶段的患者，BOCF 终点定义为末次非缺失观测值；对于提前终止的患者，BOCF 终点定义为基线值。</p>
 <p>对于提前终止试验的患者，脱落原因被归类为治疗相关或非治疗相关。治疗相关原因包括"不良事件"和"疗效不佳"。非治疗相关原因包括"不符合入组标准""违反方案""失访""受试者决定"（如工作冲突、交通不便、搬迁或不愿意填写问卷）以及"研究者决定"（如研究中心关闭或患者被认为不可靠）。</p>
@@ -152,9 +183,9 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 <p>所有分析均纳入具有基线及至少一次基线后观测的患者。所有检验均为双侧，显著性水平 0.05。文中"显著"一词均指统计学显著。</p>
 <div class="note"><span class="nt">背景与解释</span>
 <p><strong>改良 BOCF（mBOCF / aeBOCF）的动机。</strong>标准 BOCF 对所有脱落者一视同仁地"回到基线"，但脱落原因五花八门。把"因不良事件停药"（治疗相关，确实可能无效或不可耐受）与"因搬家、失访等无关原因停药"（治疗可能本来有效）混为一谈，会稀释甚至掩盖真实疗效。mBOCF 的思路是：对非治疗相关脱落者沿用其末次观测（LOCF 式），只对治疗相关脱落者回到基线；aeBOCF 则更进一步，仅对因不良事件脱落者回到基线。这样做的目的，是避免把"因不良事件停药"一刀切地错判为"无效"，从而更贴近患者的实际治疗结局。</p>
-</div></section></section><section id="sec8"><h2 class="pmc_sec_title">结果</h2>
+</div></section></section><section id="sec8"><h2 class="pmc_sec_title" id="sec-结果-2">结果</h2>
 <p>患者去向见 <a href="#t1-ppa-4-011" class="usa-link">表 1</a>。与安慰剂组相比，度洛西汀组在两项研究中因不良事件而终止者均显著更多（研究 1，<em>P</em> &lt; 0.05；研究 2，<em>P</em> &lt; 0.01）。此外，在研究 2 中，完成研究的患者比例在度洛西汀组（72.7%）与安慰剂组（86.7%）间存在显著差异（<em>P</em> &lt; 0.01）。两项研究中，因受试者决定、违反方案、研究者决定、失访、疗效不佳及不符合入组标准而终止者，各治疗组间均无差异。</p>
-<section class="tw xbox font-sm" id="t1-ppa-4-011"><h3 class="obj_head">表 1.</h3>
+<section class="tw xbox font-sm" id="t1-ppa-4-011"><h3 class="obj_head" id="sec-表-1">表 1.</h3>
 <div class="caption p"><p>患者去向</p></div>
 <div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups">
 <thead>
@@ -258,7 +289,7 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 <div class="note"><span class="nt">背景与解释</span>
 <p><strong>MMRM 为何更受推崇。</strong>混合模型重复测量（MMRM）不"填补"缺失值，而是基于似然（likelihood-based）直接对所有可用数据建模，并允许不同时间点之间存在相关结构。它对 MAR 假设下的缺失数据具有一致性估计，且不像 LOCF / BOCF 那样强加"末次水平不变"或"回落基线"之类的强假设。正因如此，FDA 与 EMA 的缺失数据指导原则均将 MMRM 列为连续型主结局的首选主分析方法之一。本文两项研究中，MMRM 给出的 P 值也最小、效应量最大，正体现了其相对更高的检验效能。</p>
 </div>
-<section class="tw xbox font-sm" id="t2-ppa-4-011"><h3 class="obj_head">表 2.</h3>
+<section class="tw xbox font-sm" id="t2-ppa-4-011"><h3 class="obj_head" id="sec-表-2">表 2.</h3>
 <div class="caption p"><p>13 周治疗阶段所有随机化患者的简明疼痛量表（BPI）平均疼痛平均变化分析</p></div>
 <div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups">
 <thead><tr>
@@ -438,7 +469,7 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 </div>
 <div class="fn" id="tfn10-ppa-4-011"><p><strong>缩写：</strong> aeBOCF，仅因不良事件脱落；BOCF，基线观测结转；DLX，度洛西汀；LOCF，末次观测结转；LS Mean，最小二乘均数；mBOCF，改良 BOCF；MMRM，混合模型重复测量；QD，每日一次；SE，标准误。</p></div>
 </div></section><p>研究 1 中，度洛西汀组与安慰剂组的应答率百分比均无差异（BOCF [45.9% 对 33.0%，<em>P</em> = 0.056]、LOCF [53.2% 对 40.0%，<em>P</em> = 0.060]、mBOCF [47.7% 对 37.4%，<em>P</em> = 0.137]、aeBOCF [48.6% 对 40.0%，<em>P</em> = 0.226]）。研究 2 中，30% 应答率的结果（<a href="#t3-ppa-4-011" class="usa-link">表 3</a>）显示，采用 BOCF（57% 对 42.5%，<em>P</em> = 0.031）、LOCF（65.3% 对 44.1%，<em>P</em> &lt; 0.001）、mBOCF（59.5% 对 42.5%，<em>P</em> = 0.008）和 aeBOCF（59.5% 对 42.5%，<em>P</em> = 0.008）时，度洛西汀组的应答率均显著高于安慰剂组。</p>
-<section class="tw xbox font-sm" id="t3-ppa-4-011"><h3 class="obj_head">表 3.</h3>
+<section class="tw xbox font-sm" id="t3-ppa-4-011"><h3 class="obj_head" id="sec-表-3">表 3.</h3>
 <div class="caption p"><p>简明疼痛量表（BPI）平均疼痛的 30% 应答率</p></div>
 <div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups">
 <thead><tr>
@@ -563,7 +594,7 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 </div>
 <div class="fn" id="tfn15-ppa-4-011"><p><strong>缩写：</strong> aeBOCF，仅因不良事件脱落；BOCF，基线观测结转；BPI，简明疼痛量表；DLX，度洛西汀；LOCF，末次观测结转；mBOCF，改良 BOCF；MMRM，混合模型重复测量；N，该类别中的患者人数；QD，每日一次。</p></div>
 </div></section><p>无论去向原因如何，度洛西汀组与安慰剂组在 BPI 平均疼痛上的治疗差异（无统计学显著性）方向，除研究 1 中"因 AEs 或 LOE 以外原因终止"外，均与完成者一致（<a href="#t4-ppa-4-011" class="usa-link">表 4</a>）。</p>
-<section class="tw xbox font-sm" id="t4-ppa-4-011"><h3 class="obj_head">表 4.</h3>
+<section class="tw xbox font-sm" id="t4-ppa-4-011"><h3 class="obj_head" id="sec-表-4">表 4.</h3>
 <div class="caption p"><p>所有随机化患者的 BPI 平均疼痛平均变化分析（LOCF 法）——按去向状态分层</p></div>
 <div class="tbl-box p" tabindex="0"><table class="content" frame="hsides" rules="groups">
 <thead>
@@ -667,7 +698,7 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 <sup>***</sup><p class="display-inline"><em>P</em> ≤ 0.001，与安慰剂相比。</p>
 </div>
 <div class="fn" id="tfn17-ppa-4-011"><p><strong>缩写：</strong> BPI，简明疼痛量表；LOCF，末次观测结转；LS，最小二乘；n，该类别中的患者人数；SE，标准误。</p></div>
-</div></section></section><section id="sec9"><h2 class="pmc_sec_title">讨论</h2>
+</div></section></section><section id="sec9"><h2 class="pmc_sec_title" id="sec-讨论">讨论</h2>
 <p>在研究 1 和研究 2 中，采用 MMRM、BOCF、LOCF 和 mBOCF 方法时，度洛西汀在主疗效指标（即 BPI 平均疼痛变化）上均优于安慰剂。采用 aeBOCF 时，度洛西汀在研究 1 中未与安慰剂分开，但在研究 2 中分开。研究 2 中，应答率（即 BPI 平均疼痛降低 ≥30%）的模式与 BPI 平均疼痛评分平均变化分析相似，BOCF、LOCF、mBOCF 和 aeBOCF 方法均显示度洛西汀优于安慰剂。然而，在研究 1 中，任何分析方法都未在 BPI 平均疼痛的 30% 应答率上显示出度洛西汀与安慰剂之间的统计学显著差异。</p>
 <p>在终止试验的患者中，药物—安慰剂治疗差异的方向一般与完成者相同，研究 1 中"因 AEs 或 LOE 以外原因终止"者除外。然而，这些差异均无统计学显著性。尽管在完成者中观察到一致的治疗差异，在脱落者中也可见总体趋势，但由于各脱落类别的样本量较小，仍难以对每一类别中的治疗效应作出确切刻画。</p>
 <p>BOCF 法未考虑因与治疗无关的原因脱落的患者所观察到的变化。此前一项基于多中心、多研究数据库的发表物报道了与提前终止研究相关的因素<a href="#b9-ppa-4-011" class="usa-link" aria-describedby="b9-ppa-4-011"><sup>9</sup></a><sup>,</sup><a href="#b10-ppa-4-011" class="usa-link" aria-describedby="b10-ppa-4-011"><sup>10</sup></a>，并表明与高失访率相关的一些变量包括：年龄、女性、非裔美国人种族、既往未参加过研究，以及美国中部以外的研究中心地理位置。此外，在大型多中心试验中，某些国家的非治疗相关事件导致终止率高于其他国家并不罕见，这可能源于全球不同人群之间的文化差异。</p>
@@ -679,10 +710,10 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
 <p>由于因非治疗相关原因提前退出临床试验的患者，在评估治疗差异时可能作出合理贡献，应考虑将这些患者纳入治疗效应评估，正如本分析所考察的 mBOCF 法那样。这可避免临床试验因患者出于非治疗相关原因脱落而导致结局偏倚。在纵向临床试验中处理提前终止是一项常见且真实的挑战。因此，重要的是不应仅依赖单一方法作为得出推论的唯一统计手段。应采用不同方法与敏感性分析来确定结论的稳健性。</p>
 <div class="note"><span class="nt">背景与解释</span>
 <p><strong>敏感性分析的意义。</strong>不同的缺失数据处理方法各自隐含不同假设，结论可能因方法而异——本文中 aeBOCF 在研究 1 即未显示显著差异，而 MMRM 始终显著。因此，监管与期刊普遍要求以 MMRM 等基于似然的方法作为主分析，同时以 LOCF、BOCF、mBOCF、aeBOCF 等多种填补方法作为敏感性分析交叉验证。只有当主要结论在不同合理假设下都稳健时，疗效证据才站得住脚。</p>
-</div></section><section id="ack1" class="ack"><h2 class="pmc_sec_title">致谢</h2>
+</div></section><section id="ack1" class="ack"><h2 class="pmc_sec_title" id="sec-致谢">致谢</h2>
 <p><strong>致谢/利益披露</strong></p>
 <p>本研究由 Eli Lilly and Company 与 Boehringer Ingelheim GmbH 资助。</p>
-<p>Hong Liu-Seifert、Shuyu Zhang、Deborah D'Souza 和 Vladimir Skljarevski 为 Eli Lilly and Company 的员工及股东。</p></section><section id="ref-list1" class="ref-list"><h2 class="pmc_sec_title">参考文献</h2>
+<p>Hong Liu-Seifert、Shuyu Zhang、Deborah D'Souza 和 Vladimir Skljarevski 为 Eli Lilly and Company 的员工及股东。</p></section><section id="ref-list1" class="ref-list"><h2 class="pmc_sec_title" id="sec-参考文献">参考文献</h2>
 <section id="ref-list1_sec2"><ul class="ref-list font-sm" style="list-style-type:none">
 <li id="b1-ppa-4-011">
 <span class="label">1.</span><cite>Liu G, Gould AL. Comparison of alternative strategies for analysis of longitudinal trials with dropouts. J Biopharm Stat. 2002;12(2):207–226. doi: 10.1081/bip-120015744.</cite> [<a href="https://doi.org/10.1081/bip-120015744" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">DOI</a>] [<a href="https://pubmed.ncbi.nlm.nih.gov/12413241/" class="usa-link">PubMed</a>] [<a href="https://scholar.google.com/scholar_lookup?journal=J%20Biopharm%20Stat&amp;title=Comparison%20of%20alternative%20strategies%20for%20analysis%20of%20longitudinal%20trials%20with%20dropouts&amp;author=G%20Liu&amp;author=AL%20Gould&amp;volume=12&amp;issue=2&amp;publication_year=2002&amp;pages=207-226&amp;pmid=12413241&amp;doi=10.1081/bip-120015744&amp;" class="usa-link usa-link--external" data-ga-action="click_feat_suppl" target="_blank" rel="noopener noreferrer">Google Scholar</a>]</li>
@@ -711,5 +742,6 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.3px;margin:6px 0 4px;line-hei
     <p><strong>版权与翻译声明：</strong>本文为 <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2819899/" target="_blank" rel="noopener">PMC2819899 原文</a>（Hong Liu-Seifert 等，<em>Patient Preference and Adherence</em>，2010）的中文翻译，仅供个人学习与科研交流之用，不代表原作者或期刊的官方中文版本。版权归原作者及期刊所有。译文中的「背景与解释」框为译者面向医学研究者补充的科普性注解，非原文内容。引用请以英文原文为准。</p>
   </div>
 </div>
+<script src="search.js"></script>
 </body>
 </html>
